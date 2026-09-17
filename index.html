@@ -144,6 +144,23 @@
         }
         .stat-loan.hidden { display: none !important; }
 
+        #creative-badge {
+            flex: 0 0 auto;
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(94,242,179,0.22), rgba(116,185,255,0.22));
+            border: 1px solid rgba(94,242,179,0.55);
+            color: var(--accent2);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            white-space: nowrap;
+        }
+        body.creative-mode #creative-badge { display: flex; }
+
         #achievements-top-btn {
             margin-left: auto;
             flex: 0 0 auto;
@@ -229,6 +246,32 @@
             box-shadow: 0 0 12px rgba(255,217,61,0.55);
         }
 
+        #settings-btn {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: 9px;
+            background: var(--btn-bg);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            font-size: 17px;
+            line-height: 1;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        #settings-btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-1px);
+            border-color: rgba(255,255,255,0.25);
+            color: var(--accent2);
+        }
+        #settings-btn:active { transform: translateY(0); }
+
         #fullscreen-btn {
             margin-left: 0;
             flex: 0 0 auto;
@@ -294,6 +337,27 @@
             border-color: var(--accent2);
             box-shadow: 0 0 0 1px rgba(94,242,179,0.22), 0 4px 12px rgba(0,0,0,0.3);
         }
+
+        /* Creative-only category tabs get a special glowing look */
+        .cat-tab.cat-tab-special {
+            background: linear-gradient(135deg, rgba(94,242,179,0.18), rgba(116,185,255,0.18));
+            border-color: rgba(94,242,179,0.55);
+            color: #b9f5d8;
+            box-shadow: 0 0 0 1px rgba(94,242,179,0.18), 0 0 10px rgba(94,242,179,0.18);
+        }
+        .cat-tab.cat-tab-special:hover {
+            background: linear-gradient(135deg, rgba(94,242,179,0.28), rgba(116,185,255,0.28));
+            border-color: rgba(94,242,179,0.85);
+            color: #e6fff2;
+            transform: translateY(-1px);
+        }
+        .cat-tab.cat-tab-special.active {
+            background: linear-gradient(180deg, rgba(94,242,179,0.42), rgba(116,185,255,0.32));
+            border-color: var(--accent2);
+            color: #fff;
+            box-shadow: 0 0 0 1px rgba(94,242,179,0.45), 0 4px 16px rgba(94,242,179,0.35);
+        }
+
         #tool-hint {
             flex: 1 1 auto;
             min-width: 0;
@@ -400,6 +464,10 @@
             z-index: 2;
         }
 
+        /* ---- Creative Mode ---- */
+        .creative-only { display: none; }
+        body.creative-mode .creative-only { display: flex; }
+
         #canvas-wrapper {
             position: relative;
             border-radius: 8px;
@@ -490,7 +558,6 @@
 
         #floating-info { position: fixed; pointer-events: none; background: rgba(15,15,30,0.93); color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 9px; z-index: 100; display: none; border: 1px solid rgba(255,255,255,0.2); max-width: 300px; line-height: 1.4; white-space: pre-line; }
 
-        /* Bigger, more compact tooltip */
         #button-tooltip {
             position: fixed;
             pointer-events: none;
@@ -541,7 +608,6 @@
             font-weight: 800;
         }
 
-        /* Requirements / Produces rows */
         #button-tooltip .tt-row {
             display: flex;
             align-items: center;
@@ -593,7 +659,6 @@
             line-height: 1;
             filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
         }
-        /* Worker requirement icon — matches the on-map badge */
         #button-tooltip .req-worker {
             position: relative;
             display: inline-block;
@@ -640,7 +705,6 @@
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20,20,40,0.94); color: var(--gold); padding: 7px 18px; border-radius: 8px; font-weight: 700; font-size: 11px; z-index: 200; pointer-events: none; opacity: 0; transition: opacity 0.3s; border: 1px solid rgba(255,217,61,0.25); }
         #toast.show { opacity: 1; }
 
-        /* Bigger achievement banner */
         #achievement-banner {
             position: fixed;
             top: 20px;
@@ -667,7 +731,6 @@
         #achievement-banner.show { opacity: 1; transform: translateX(0) scale(1); }
         #achievement-banner .ach-icon { font-size: 36px; line-height: 1; }
 
-        /* Big first-disaster alert */
         #disaster-alert {
             position: fixed;
             top: 42%;
@@ -739,6 +802,7 @@
         #gameover-modal .modal-content { border-color: var(--accent); box-shadow: 0 0 40px rgba(255,94,126,0.35); }
         #win-modal .modal-content { border-color: var(--gold); box-shadow: 0 0 55px rgba(255,217,61,0.45); }
         #loan-modal .modal-content { border-color: var(--gold); box-shadow: 0 0 40px rgba(255,217,61,0.28); max-width: 420px; }
+        #settings-modal .modal-content { border-color: var(--accent2); box-shadow: 0 0 40px rgba(94,242,179,0.25); max-width: 420px; }
 
         #restart-btn, #win-restart-btn {
             padding: 9px 20px; border-radius: 9px;
@@ -786,7 +850,7 @@
         #size-modal .modal-content {
             border-color: var(--accent2);
             box-shadow: 0 0 50px rgba(94,242,179,0.25);
-            max-width: 420px;
+            max-width: 460px;
         }
         .size-btn {
             display: flex;
@@ -814,6 +878,127 @@
         .size-btn .sb-name { font-weight: 800; font-size: 13px; }
         .size-btn .sb-dim { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
         .size-btn .sb-rec { font-size: 10px; color: var(--accent2); font-weight: 700; margin-left: 4px; }
+
+        .size-btn.size-btn-normal {
+            border-color: rgba(94,242,179,0.45);
+            background: linear-gradient(180deg, rgba(94,242,179,0.10), rgba(94,242,179,0.03));
+        }
+        .size-btn.size-btn-normal:hover {
+            border-color: var(--accent2);
+            box-shadow: 0 4px 16px rgba(94,242,179,0.28);
+        }
+        .size-btn.size-btn-normal .sb-name { color: var(--accent2); }
+
+        .mode-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 10px 8px;
+            border-radius: 10px;
+            background: var(--panel-light);
+            border: 2px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .mode-btn:hover {
+            background: var(--panel-lighter);
+            border-color: var(--accent2);
+            transform: translateY(-1px);
+        }
+        .mode-btn.active {
+            background: linear-gradient(180deg, #3a3a70, #2a2a55);
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 1px rgba(94,242,179,0.22), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .mode-btn .mb-icon { font-size: 22px; line-height: 1; }
+        .mode-btn .mb-name { font-size: 12.5px; font-weight: 800; }
+        .mode-btn .mb-desc { font-size: 9.5px; color: var(--text-dim); font-weight: 600; }
+        .mode-btn.active .mb-desc { color: #b9f5d8; }
+
+        #custom-size-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+            -moz-appearance: textfield;
+        }
+        #custom-size-input::-webkit-outer-spin-button,
+        #custom-size-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        #custom-size-input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 2px rgba(94,242,179,0.15); }
+
+        #custom-start-btn {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #5ef2b3, #2fbf85);
+            border: 1px solid #a9ffe0;
+            color: #06281c;
+            font-weight: 800;
+            font-size: 12.5px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+        }
+        #custom-start-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(94,242,179,0.5); }
+        #custom-start-btn:active { transform: translateY(0); }
+
+        /* Toggle switch for settings */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+            flex: 0 0 auto;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #3a3a68;
+            transition: .2s;
+            border-radius: 26px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            transition: .2s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(180deg, #5ef2b3, #2fbf85);
+            border-color: rgba(94,242,179,0.6);
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        .toggle-switch input:disabled + .toggle-slider {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -847,9 +1032,11 @@
                 </span>
             </div>
         </div>
+        <div id="creative-badge">🎨 CREATIVE</div>
         <button id="achievements-top-btn" title="Achievements" aria-label="Achievements">🏆</button>
         <button id="bank-nav-btn" title="Go to Bank" aria-label="Go to Bank">🏦</button>
         <button id="pause-btn" title="Pause Game" aria-label="Pause Game">⏸️</button>
+        <button id="settings-btn" title="Settings" aria-label="Settings">⚙️</button>
         <button id="fullscreen-btn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
     </div>
 
@@ -860,6 +1047,8 @@
             <button class="cat-tab" data-cat="services"><span>🏛️</span>Services</button>
             <button class="cat-tab" data-cat="transport"><span>🛣️</span>Transport</button>
             <button class="cat-tab" data-cat="safety"><span>🚨</span>Safety</button>
+            <button class="cat-tab creative-only cat-tab-special" data-cat="terrain"><span>🌍</span>Terrain</button>
+            <button class="cat-tab creative-only cat-tab-special" data-cat="disasters"><span>💥</span>Disasters</button>
             <button class="cat-tab" data-cat="tools"><span>🧰</span>Tools</button>
         </div>
         <div id="tool-hint">Bank — place this first! It's free.</div>
@@ -983,6 +1172,79 @@
                 <span class="tb-cost">$400</span>
             </button>
 
+            <button class="tool-btn creative-only" data-tool="terrain_deep" data-desc="Paints Deep Water on a tile. Creative mode only.">
+                <span class="tb-icon">🌊</span>
+                <span class="tb-name">Deep Water</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_shallow" data-desc="Paints Shallow Water on a tile. Creative mode only.">
+                <span class="tb-icon">💧</span>
+                <span class="tb-name">Shallow Water</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_sand" data-desc="Paints Sand on a tile. Creative mode only.">
+                <span class="tb-icon">🏖️</span>
+                <span class="tb-name">Sand</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_grass" data-desc="Paints Grass on a tile. Creative mode only.">
+                <span class="tb-icon">🌿</span>
+                <span class="tb-name">Grass</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_forest" data-desc="Paints Forest on a tile. Creative mode only.">
+                <span class="tb-icon">🌲</span>
+                <span class="tb-name">Forest</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_taiga" data-desc="Paints Taiga on a tile. Creative mode only.">
+                <span class="tb-icon">❄️</span>
+                <span class="tb-name">Taiga</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_mountain" data-desc="Paints Mountain on a tile. Creative mode only.">
+                <span class="tb-icon">⛰️</span>
+                <span class="tb-name">Mountain</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_mud" data-desc="Paints Mud on a tile. Creative mode only.">
+                <span class="tb-icon">🟤</span>
+                <span class="tb-name">Mud</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_lava" data-desc="Paints Lava on a tile. Creative mode only.">
+                <span class="tb-icon">🔥</span>
+                <span class="tb-name">Lava</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="terrain_hard_stone" data-desc="Paints Hard Stone on a tile. Creative mode only.">
+                <span class="tb-icon">🪨</span>
+                <span class="tb-name">Hard Stone</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="volcano" data-desc="Places a Volcano — only on Mountain tiles. Creative mode only.">
+                <span class="tb-icon">🌋</span>
+                <span class="tb-name">Volcano</span>
+                <span class="tb-cost">Free</span>
+            </button>
+
+            <!-- Creative-only disaster spawners -->
+            <button class="tool-btn creative-only" data-tool="disaster_tornado" data-desc="Spawns a Tornado where you click. Moves and damages like a natural one. No spawn limit.">
+                <span class="tb-icon">🌪️</span>
+                <span class="tb-name">Tornado</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="disaster_firestorm" data-desc="Spawns a Firestorm where you click. Ignites buildings and trees. No spawn limit.">
+                <span class="tb-icon">🔥</span>
+                <span class="tb-name">Firestorm</span>
+                <span class="tb-cost">Free</span>
+            </button>
+            <button class="tool-btn creative-only" data-tool="disaster_airplane" data-desc="Spawns an Airplane where you click. Drops bombs along its flight path. No spawn limit.">
+                <span class="tb-icon">✈️</span>
+                <span class="tb-name">Airplane</span>
+                <span class="tb-cost">Free</span>
+            </button>
+
             <button class="tool-btn" data-tool="tree" data-desc="Plants a tree matching the tile's terrain (grass/forest → normal, taiga → pine).">
                 <span class="tb-key">R</span>
                 <span class="tb-icon">🌲</span>
@@ -1015,8 +1277,6 @@
             </span>
         </div>
     </div>
-
-    <!-- ===== Overlays & modals live INSIDE the game container so they also work in fullscreen ===== -->
 
     <div class="modal-overlay" id="achievements-modal">
         <div class="modal-content">
@@ -1097,11 +1357,42 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-settings-modal">&times;</button>
+            <h2 style="margin-bottom:14px;">⚙️ Settings</h2>
+            <div id="settings-creative-note" style="display:none; margin-bottom:14px; padding:10px 12px; background:rgba(255,217,61,0.08); border:1px solid rgba(255,217,61,0.3); border-radius:8px; font-size:11.5px; color:#ffd93d; line-height:1.5;">
+                🎨 These settings only apply in <strong>Creative Mode</strong>.<br>
+                Natural disasters are always active in <strong>Normal Mode</strong>.
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--panel-light); border-radius:10px; border:1px solid var(--border); margin-bottom:10px;">
+                <div style="flex:1;">
+                    <div style="font-weight:800; font-size:13px; margin-bottom:2px;">🔊 Sound</div>
+                    <div style="font-size:10.5px; color:var(--text-dim); line-height:1.4;">Play sound effects for actions and events.</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="sound-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div id="settings-natural-row" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--panel-light); border-radius:10px; border:1px solid var(--border); transition: opacity 0.15s;">
+                <div style="flex:1;">
+                    <div style="font-weight:800; font-size:13px; margin-bottom:2px;">🌪️ Natural Disasters</div>
+                    <div style="font-size:10.5px; color:var(--text-dim); line-height:1.4;">Disasters spawn automatically over time. Off by default in Creative Mode.</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="natural-disasters-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="intro-modal">
         <div class="modal-content" style="text-align:center;">
-            <div style="font-size:42px; line-height:1; margin-bottom:6px;">🏦</div>
-            <h2 style="margin-bottom:12px; letter-spacing:0.5px;">Welcome to Tile Game</h2>
-            <div style="font-size:12.5px; line-height:1.65; color:var(--text-dim); text-align:left;">
+            <div style="font-size:42px; line-height:1; margin-bottom:6px;" id="intro-icon">🏦</div>
+            <h2 style="margin-bottom:12px; letter-spacing:0.5px;" id="intro-title">Welcome to Tile Game</h2>
+            <div class="intro-body" style="font-size:12.5px; line-height:1.65; color:var(--text-dim); text-align:left;">
                 <p style="margin-bottom:12px;">
                     <strong style="color:var(--gold);">1 · Place your Bank first.</strong><br>
                     Click on your bank to take a loan.
@@ -1121,30 +1412,49 @@
 
     <div class="modal-overlay open" id="size-modal">
         <div class="modal-content" style="text-align:center;">
-            <h2 style="margin-bottom:6px;">🌍 Select Map Size</h2>
-            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 16px;">Choose a world size to start your city.</p>
+            <h2 style="margin-bottom:6px;">🌍 New World</h2>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 14px;">Choose a mode and world size.</p>
+
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Game Mode</div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="mode-btn active" data-mode="normal">
+                        <span class="mb-icon">🎮</span>
+                        <span class="mb-name">Normal</span>
+                        <span class="mb-desc">Normal mode survival</span>
+                    </button>
+                    <button class="mode-btn" data-mode="creative">
+                        <span class="mb-icon">🎨</span>
+                        <span class="mb-name">Creative</span>
+                        <span class="mb-desc">Sandbox · ∞ money</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Map Size</div>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="size-btn" data-size="50">
+                <button class="size-btn size-btn-normal" data-size="150">
                     <span class="sb-icon">🟢</span>
                     <div class="sb-info">
-                        <div class="sb-name">Small</div>
-                        <div class="sb-dim">50 × 50 tiles</div>
-                    </div>
-                </button>
-                <button class="size-btn" data-size="100">
-                    <span class="sb-icon">🟡</span>
-                    <div class="sb-info">
-                        <div class="sb-name">Medium<span class="sb-rec">(Recommended)</span></div>
-                        <div class="sb-dim">100 × 100 tiles</div>
-                    </div>
-                </button>
-                <button class="size-btn" data-size="150">
-                    <span class="sb-icon">🔴</span>
-                    <div class="sb-info">
-                        <div class="sb-name">Large</div>
+                        <div class="sb-name">Normal</div>
                         <div class="sb-dim">150 × 150 tiles</div>
+                        <div class="sb-dim">The normal way to play</div>
                     </div>
                 </button>
+                <button class="size-btn" data-size="custom">
+                    <span class="sb-icon">📐</span>
+                    <div class="sb-info">
+                        <div class="sb-name">Custom</div>
+                        <div class="sb-dim">Choose your own size</div>
+                    </div>
+                </button>
+            </div>
+
+            <div id="custom-size-panel" style="display: none; margin-top: 14px; padding: 12px; background: var(--panel-light); border-radius: 10px; border: 1px solid var(--border);">
+                <label for="custom-size-input" style="display: block; font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Map size (tiles × tiles)</label>
+                <input type="number" id="custom-size-input" min="20" max="500" value="200">
+                <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px;">Min 20 — Max 500 (square map)</div>
+                <button id="custom-start-btn">🚀 Start Game</button>
             </div>
         </div>
     </div>
@@ -1167,8 +1477,8 @@
 (function() {
     // ---- GAME CONSTANTS ----
     const TILE = 16;
-    let W = 100;
-    let H = 100;
+    let W = 150;
+    let H = 150;
     let CW = W * TILE;
     let CH = H * TILE;
     const TICK = 600;
@@ -1205,8 +1515,13 @@
     const DISASTER_BASE_HEALTH = { tornado: 100, firestorm: 70, airplane: 60 };
     const DISASTER_SPEED = { tornado: 80, firestorm: 55, airplane: 160 };
     const DISASTER_RADIUS = { tornado: 30, firestorm: 26, airplane: 12 };
-    const DISASTER_START_DELAY = 480;               // ← 8 minutes before first disaster
-    const MAX_DISASTERS = 30;                       // ← cap on simultaneous disasters
+    const DISASTER_START_DELAY = 480;
+    const DISASTER_LIMIT_REF_TILES = 150 * 150;
+    const DISASTER_LIMIT_REF_COUNT = 30;
+    function getMaxDisasters() {
+        const totalTiles = W * H;
+        return Math.max(1, Math.round((totalTiles / DISASTER_LIMIT_REF_TILES) * DISASTER_LIMIT_REF_COUNT));
+    }
     const WORKER_SPEED = 80;
     const WORK_WAIT_MIN = 30;
     const WORK_WAIT_MAX = 60;
@@ -1291,12 +1606,42 @@
         LAVA_HARVESTER: 'lavaharvester', ROAD: 'road', CONVEYOR: 'conveyor', PARK: 'park', CINEMA: 'cinema',
         ARCADE: 'arcade',
         SCHOOL: 'school', TURRET: 'turret', FIRESTATION: 'firestation', FIREWATCH: 'firewatch',
-        STORMDEFENDER: 'stormdefender', TREE: 'tree', BULLDOZE: 'bulldoze' };
+        STORMDEFENDER: 'stormdefender', TREE: 'tree', BULLDOZE: 'bulldoze',
+        TERRAIN_DEEP: 'terrain_deep', TERRAIN_SHALLOW: 'terrain_shallow',
+        TERRAIN_SAND: 'terrain_sand', TERRAIN_GRASS: 'terrain_grass',
+        TERRAIN_FOREST: 'terrain_forest', TERRAIN_TAIGA: 'terrain_taiga',
+        TERRAIN_MOUNTAIN: 'terrain_mountain', TERRAIN_MUD: 'terrain_mud',
+        TERRAIN_LAVA: 'terrain_lava',
+        TERRAIN_HARD_STONE: 'terrain_hard_stone', VOLCANO: 'volcano',
+        DISASTER_TORNADO: 'disaster_tornado', DISASTER_FIRESTORM: 'disaster_firestorm',
+        DISASTER_AIRPLANE: 'disaster_airplane' };
+
+    const TERRAIN_TOOLS = new Set(['terrain_deep', 'terrain_shallow', 'terrain_sand', 'terrain_grass',
+        'terrain_forest', 'terrain_taiga', 'terrain_mountain', 'terrain_mud', 'terrain_lava',
+        'terrain_hard_stone', 'volcano']);
+
+    const DISASTER_TOOLS = new Set(['disaster_tornado', 'disaster_firestorm', 'disaster_airplane']);
+
+    const TERRAIN_TOOL_MAP = {
+        terrain_deep: 'deep',
+        terrain_shallow: 'shallow',
+        terrain_sand: 'sand',
+        terrain_grass: 'grass',
+        terrain_forest: 'forest',
+        terrain_taiga: 'taiga',
+        terrain_mountain: 'mountain',
+        terrain_mud: 'mud',
+        terrain_lava: 'lava',
+        terrain_hard_stone: 'hard_stone'
+    };
+
     const COSTS = { bank: 0, house: 40, shop: 80, factory: 120, warehouse: 150, granary: 100, farm: 20,
         lavaharvester: 180, road: 5, conveyor: 10, park: 40, cinema: 150, arcade: 120, school: 200, turret: 150,
-        firestation: 250, firewatch: 500, stormdefender: 400, tree: 5 };   // ← turret $150, tornado defender $400
+        firestation: 250, firewatch: 500, stormdefender: 400, tree: 5,
+        terrain_deep: 0, terrain_shallow: 0, terrain_sand: 0, terrain_grass: 0, terrain_forest: 0,
+        terrain_taiga: 0, terrain_mountain: 0, terrain_mud: 0, terrain_lava: 0, terrain_hard_stone: 0, volcano: 0,
+        disaster_tornado: 0, disaster_firestorm: 0, disaster_airplane: 0 };
 
-    // Tools that only unlock once a Shop has been built (permanent unlock)
     const SHOP_GATED_TOOLS = new Set(['factory', 'park', 'cinema', 'arcade', 'school', 'firestation', 'firewatch']);
 
     const TOOL_REQ_ICONS = {
@@ -1320,9 +1665,22 @@
         bulldoze: [],
         bank: [],
         road: [],
+        terrain_deep: [],
+        terrain_shallow: [],
+        terrain_sand: [],
+        terrain_grass: [],
+        terrain_forest: [],
+        terrain_taiga: [],
+        terrain_mountain: [],
+        terrain_mud: [],
+        terrain_lava: [],
+        terrain_hard_stone: [],
+        volcano: ['⛰️'],
+        disaster_tornado: [],
+        disaster_firestorm: [],
+        disaster_airplane: [],
     };
 
-    // What each tool produces (shown in the pre-placement tooltip)
     const TOOL_PRODUCES = {
         bank:       [{ i: '💰', n: 'Loans' }],
         house:      [{ i: '👥', n: 'Population' }],
@@ -1344,6 +1702,20 @@
         stormdefender: [{ i: '🌩️', n: 'Tornado defense' }],
         tree:       [{ i: '🌲', n: 'Nature' }],
         bulldoze:   [{ i: '❌', n: 'Removal (50% refund)' }],
+        terrain_deep: [{ i: '🌊', n: 'Deep water tile' }],
+        terrain_shallow: [{ i: '💧', n: 'Shallow water tile' }],
+        terrain_sand: [{ i: '🏖️', n: 'Sand tile' }],
+        terrain_grass: [{ i: '🌿', n: 'Grass tile' }],
+        terrain_forest: [{ i: '🌲', n: 'Forest tile' }],
+        terrain_taiga: [{ i: '❄️', n: 'Taiga tile' }],
+        terrain_mountain: [{ i: '⛰️', n: 'Mountain tile' }],
+        terrain_mud: [{ i: '🟤', n: 'Mud tile' }],
+        terrain_lava: [{ i: '🔥', n: 'Lava tile' }],
+        terrain_hard_stone: [{ i: '🪨', n: 'Hard stone tile' }],
+        volcano: [{ i: '🌋', n: 'Erupting volcano' }],
+        disaster_tornado: [{ i: '💥', n: 'Spawns a tornado' }],
+        disaster_firestorm: [{ i: '💥', n: 'Spawns a firestorm' }],
+        disaster_airplane: [{ i: '💥', n: 'Spawns an airplane' }],
     };
 
     const ACHIEVEMENTS = {
@@ -1371,6 +1743,9 @@
     const achieved = new Set();
     let actx = null;
 
+    // ---- SOUND FLAG ----
+    let soundEnabled = true;
+
     const cam = { ox: 0, oy: 0, z: 1.0, minZ: 0.1, maxZ: 6.0, panning: false, px: 0, py: 0, pox: 0, poy: 0 };
     let camTween = null;
 
@@ -1385,14 +1760,18 @@
     let gameOver = false;
     let gameWon = false;
     let freePlay = false;
+    let creativeMode = false;
     let gamePaused = false;
     let lastLockToast = 0;
     let farmNetworkDirty = false;
     let farmNetTimer = 0;
     let gameStarted = false;
     let factoryBuilt = false;
-    let shopBuilt = false;            // ← permanent unlock flag for shop-gated tools
+    let shopBuilt = false;
     let firstDisasterAlertShown = false;
+
+    // Natural disasters toggle — true in normal mode, false by default in creative
+    let naturalDisastersEnabled = true;
 
     let loan = null;
 
@@ -1403,8 +1782,21 @@
     let mouseInside = false;
 
     function initAudio() { if (!actx) actx = new(window.AudioContext || window.webkitAudioContext)(); }
-    function tone(freq, dur = 0.08, type = 'sine', vol = 0.1) { if (!actx) return; try { const o = actx.createOscillator(), g = actx.createGain(); o.type = type; o.frequency.setValueAtTime(freq, actx.currentTime); g.gain.setValueAtTime(Math.min(vol,0.18), actx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur); o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + dur); } catch (_) {} }
+    function tone(freq, dur = 0.08, type = 'sine', vol = 0.1) {
+        if (!soundEnabled) return;
+        if (!actx) return;
+        try {
+            const o = actx.createOscillator(), g = actx.createGain();
+            o.type = type;
+            o.frequency.setValueAtTime(freq, actx.currentTime);
+            g.gain.setValueAtTime(Math.min(vol,0.18), actx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+            o.connect(g); g.connect(actx.destination);
+            o.start(); o.stop(actx.currentTime + dur);
+        } catch (_) {}
+    }
     function sfx(type) {
+        if (!soundEnabled) return;
         initAudio();
         switch (type) {
             case 'bank': tone(520,0.1,'sine',0.15); setTimeout(() => tone(780,0.12,'triangle',0.13),90); break;
@@ -1449,6 +1841,8 @@
             case 'regrow': tone(720,0.09,'sine',0.11); setTimeout(() => tone(900,0.11,'triangle',0.09),80); break;
             case 'gameover': tone(300,0.4,'sawtooth',0.15); setTimeout(() => tone(180,0.6,'sawtooth',0.13),250); setTimeout(() => tone(90,0.9,'sine',0.12),550); break;
             case 'victory': tone(523,0.15,'sine',0.16); setTimeout(() => tone(659,0.15,'sine',0.16),140); setTimeout(() => tone(784,0.15,'sine',0.16),280); setTimeout(() => tone(1047,0.35,'triangle',0.15),430); break;
+            case 'terrain': tone(440,0.06,'triangle',0.09); setTimeout(() => tone(600,0.08,'sine',0.07),50); break;
+            case 'volcano': tone(120,0.3,'sawtooth',0.15); setTimeout(() => tone(70,0.5,'sine',0.12),100); break;
             case 'siren':
                 tone(880,0.34,'sawtooth',0.13);
                 setTimeout(() => tone(620,0.34,'sawtooth',0.13), 340);
@@ -2039,7 +2433,6 @@
     }
     function canConveyor(c, r) { if (!isBuildable(c, r)) return false; const idx = r * W + c; if (buildings[idx] !== null || roads[idx] || conveyors[idx]) return false; return true; }
 
-    // Cost of clearing a tree on the tile (0 if no tree or already burned).
     function treeClearCost(idx) {
         const t = trees[idx];
         if (t === TREE_NORMAL || t === TREE_TAIGA) return 5;
@@ -2050,8 +2443,10 @@
         const idx = r * W + c;
         const t = trees[idx];
         if (t === TREE_NORMAL || t === TREE_TAIGA) {
-            if (money < 5) return false;
-            money -= 5;
+            if (!creativeMode) {
+                if (money < 5) return false;
+                money -= 5;
+            }
             trees[idx] = TREE_NONE;
         } else if (t === TREE_BURNED || t === TREE_TAIGA_BURNED) {
             trees[idx] = TREE_NONE;
@@ -2084,13 +2479,6 @@
 
     // ============================================================
     // GRANARY / FARM NETWORK
-    // ------------------------------------------------------------
-    // Farms belong to the closest *operational* granary in their
-    // connected network. If that granary stops working (no workers,
-    // no road, deleted) the farm automatically re-attaches to another
-    // operational granary in the same network. If any farm in a
-    // network sits on polluted land, every granary in that network
-    // becomes contaminated and stops working.
     // ============================================================
     function isGranaryOperational(g) {
         if (!g || !g.b) return false;
@@ -2113,7 +2501,6 @@
         for (const f of farms) nodes.set(keyOf(f.c, f.r), { c: f.c, r: f.r, type: 'farm', entry: f });
         if (nodes.size === 0) return;
 
-        // Build adjacency between neighbouring granary / farm nodes
         const adj = new Map();
         for (const [k, n] of nodes) {
             const list = [];
@@ -2147,7 +2534,6 @@
             }
             if (compGranaries.length === 0 && compFarms.length === 0) continue;
 
-            // ---- Contamination: one polluted farm contaminates the whole network ----
             let contaminated = false;
             for (const fk of compFarms) {
                 const n = nodes.get(fk);
@@ -2170,7 +2556,6 @@
 
             if (contaminated || compFarms.length === 0) continue;
 
-            // ---- Multi-source BFS from every operational granary ----
             const distMap = new Map();
             const srcMap = new Map();
             const q = [];
@@ -2634,7 +3019,6 @@
                     candidates.push({
                         targetC: nc,
                         targetR: nr,
-                        // The truck drives all the way onto the shop tile to unload
                         path: [[granaryC, granaryR], ...roadPath, [nc, nr]],
                         food: nb.food,
                         dist: roadPath.length
@@ -2686,8 +3070,6 @@
         if (foodTrucks.some(t => t.granaryC === c && t.granaryR === r)) return false;
         const target = findShopNeedingFoodFromGranary(c, r);
         if (!target) return false;
-        // Spawn a truck in "loading" state (van disappears for VAN_LOAD_TIME at the granary,
-        // then drives out with its cargo — mirrors the factory van behaviour).
         foodTrucks.push({
             granaryC: c, granaryR: r,
             shopC: target.targetC, shopR: target.targetR,
@@ -2717,7 +3099,6 @@
             if (!granaryB || granaryB.type !== 'granary') { foodTrucks.splice(i, 1); continue; }
 
             if (t.state === 'loading') {
-                // Van is parked at the granary "loading" — it's hidden from the map during this time.
                 t.timer -= dt;
                 if (t.timer <= 0) {
                     if (granaryB.contaminated || (granaryB.occupancy || 0) <= 0) {
@@ -2890,6 +3271,7 @@
     // ============================================================
     function triggerGameOver() {
         if (gameOver || gameWon) return;
+        if (creativeMode) return;
         gameOver = true;
         mDown = false;
         cam.panning = false;
@@ -2939,6 +3321,7 @@
     }
 
     function isToolLocked(key) {
+        if (creativeMode) return false;
         if (!bankPlaced && key !== 'bank') return true;
         if (key === 'shop' && !unlockedTools.has('shop')) return true;
         if (key === 'farm' && !unlockedTools.has('farm')) return true;
@@ -2950,13 +3333,13 @@
     function updateToolLockState() {
         window.__bankPlaced = bankPlaced;
         const bankBtn = document.querySelector('#tool-buttons .tool-btn[data-tool="bank"]');
-        if (bankBtn) bankBtn.classList.toggle('bank-hidden', bankPlaced);
+        if (bankBtn) bankBtn.classList.toggle('bank-hidden', bankPlaced && !creativeMode);
         document.querySelectorAll('#tool-buttons .tool-btn').forEach(b => {
             const key = b.dataset.tool;
             b.classList.toggle('locked', isToolLocked(key));
         });
         const moneyStat = document.getElementById('money-stat');
-        if (moneyStat) moneyStat.classList.toggle('hidden', !bankPlaced);
+        if (moneyStat) moneyStat.classList.toggle('hidden', !bankPlaced && !creativeMode);
         if (typeof window.__refreshCategories === 'function') window.__refreshCategories();
     }
 
@@ -2967,7 +3350,7 @@
             lockToast(lockMessage(type));
             return false;
         }
-        if (type === 'bank' && bankPlaced) {
+        if (type === 'bank' && bankPlaced && !creativeMode) {
             lockToast('🏦 You already have a Bank!');
             return false;
         }
@@ -2975,22 +3358,25 @@
 
         if (type === 'bank') {
             const mountains = countAdjacentMountains(c, r);
-            if (mountains >= 2) {
+            if (mountains >= 2 && !creativeMode) {
                 lockToast('🏦 Too many mountains tiles nearby!');
                 return false;
             }
         }
 
-        if (type === 'farm' && !hasGranaryOrFarmNeighbor(c, r)) {
+        if (type === 'farm' && !hasGranaryOrFarmNeighbor(c, r) && !creativeMode) {
             lockToast('🚜 Farms must be built next to a Granary or another Farm!');
             return false;
         }
 
         const idx = r * W + c;
-        // Check affordability (including the tree-clearing cost) BEFORE removing anything.
-        const totalCost = COSTS[type] + treeClearCost(idx);
-        if (money < totalCost) return cantAfford(totalCost);
-        if (!clearTree(c, r)) return cantAfford(totalCost);
+        if (!creativeMode) {
+            const totalCost = COSTS[type] + treeClearCost(idx);
+            if (money < totalCost) return cantAfford(totalCost);
+            if (!clearTree(c, r)) return cantAfford(totalCost);
+        } else {
+            clearTree(c, r);
+        }
 
         const b = { type: type, ammo: 0, maxAmmo: 0, cooldown: 0, population: 0, occupancy: 0, pendingOccupancy: 0, collectTimer: 0, burning: false, burnTimer: 0 };
         if (type === 'factory') { b.ammo = 0; b.maxAmmo = FACTORY_AMMO_MAX; b.hasVan = false; }
@@ -2998,12 +3384,12 @@
         if (type === 'turret') { b.ammo = 0; b.maxAmmo = TURRET_AMMO_MAX; b.cooldown = 0; }
         if (type === 'stormdefender') { b.ammo = 0; b.maxAmmo = TORNADO_DEFENDER_AMMO_MAX; b.cooldown = 0; }
         if (type === 'lavaharvester') { b.collectTimer = LAVA_HARVEST_INTERVAL; b.ammo = 0; b.maxAmmo = LAVA_HARVESTER_PRODUCE_MAX; }
-        if (type === 'house') { 
-            b.population = 1 + Math.floor(Math.random() * 4); 
+        if (type === 'house') {
+            b.population = 1 + Math.floor(Math.random() * 4);
             b.maxPopulation = b.population;
             b.regrowthTimer = HOUSE_REGROWTH_INTERVAL;
-            b.schoolTrips = 0; 
-            b.upgraded = false; 
+            b.schoolTrips = 0;
+            b.upgraded = false;
             b.retryCooldown = 0;
             b.feedTimer = HOUSE_FEED_INTERVAL_MIN + Math.random() * (HOUSE_FEED_INTERVAL_MAX - HOUSE_FEED_INTERVAL_MIN);
             b.hungry = false;
@@ -3021,7 +3407,7 @@
         if (type === 'granary') { b.food = 0; b.maxFood = GRANARY_MAX_FOOD; b.contaminated = false; }
         buildings[idx] = b;
         buildingLists[type].push({ c, r, b });
-        money -= COSTS[type];
+        if (!creativeMode) money -= COSTS[type];
         counts[type]++;
 
         if (type === 'granary' || type === 'farm') farmNetworkDirty = true;
@@ -3052,14 +3438,16 @@
         if (type === 'bank') {
             bankPlaced = true;
             updateToolLockState();
-            tool = TOOLS.NONE;
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            if (typeof window.__updatePlacingIndicator === 'function') window.__updatePlacingIndicator();
-            if (typeof window.__updateHint === 'function') window.__updateHint();
+            if (!creativeMode) {
+                tool = TOOLS.NONE;
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                if (typeof window.__updatePlacingIndicator === 'function') window.__updatePlacingIndicator();
+                if (typeof window.__updateHint === 'function') window.__updateHint();
+            }
             sfx('bank');
             spawnFireworks(10);
             celebrating = true; celebrateTimer = 3.0;
-            toast('🏦 Bank placed! Click your Bank anytime to take a loan.');
+            toast(creativeMode ? '🏦 Bank placed! Place as many as you like in Creative mode.' : '🏦 Bank placed! Click your Bank anytime to take a loan.');
             checkAchievements(type);
             return true;
         }
@@ -3074,7 +3462,7 @@
 
     function placeRoad(c, r) {
         if (isGameEnded()) return false;
-        if (!bankPlaced) { lockToast('🏦 Place your Bank first!'); return false; }
+        if (!bankPlaced && !creativeMode) { lockToast('🏦 Place your Bank first!'); return false; }
         if (!canRoad(c, r)) {
             if (c >= 0 && c < W && r >= 0 && r < H) {
                 const tt = ttype[r * W + c];
@@ -3085,15 +3473,19 @@
             return false;
         }
         const idx = r * W + c;
-        const totalCost = COSTS.road + treeClearCost(idx);
-        if (money < totalCost) return cantAfford(totalCost);
-        if (!clearTree(c, r)) return cantAfford(totalCost);
+        if (!creativeMode) {
+            const totalCost = COSTS.road + treeClearCost(idx);
+            if (money < totalCost) return cantAfford(totalCost);
+            if (!clearTree(c, r)) return cantAfford(totalCost);
+        } else {
+            clearTree(c, r);
+        }
         roads[idx] = 1;
         if (ttype[idx] === 'river' || ttype[idx] === 'mud') {
             bridges[idx] = 1;
             if (isOnScreen(c, r)) toast(ttype[idx] === 'river' ? '🌉 Bridge built over the river!' : '🌉 Bridge built over the mud!');
         }
-        money -= COSTS.road;
+        if (!creativeMode) money -= COSTS.road;
         counts.road++;
         if (isOnScreen(c, r)) sfx('road');
         recalcPopulation();
@@ -3102,15 +3494,19 @@
     }
     function placeConveyor(c, r) {
         if (isGameEnded()) return false;
-        if (!bankPlaced) { lockToast('🏦 Place your Bank first!'); return false; }
-        if (!factoryBuilt) { lockToast(lockMessage('conveyor')); return false; }
+        if (!bankPlaced && !creativeMode) { lockToast('🏦 Place your Bank first!'); return false; }
+        if (!factoryBuilt && !creativeMode) { lockToast(lockMessage('conveyor')); return false; }
         if (!canConveyor(c, r)) return false;
         const idx = r * W + c;
-        const totalCost = COSTS.conveyor + treeClearCost(idx);
-        if (money < totalCost) return cantAfford(totalCost);
-        if (!clearTree(c, r)) return cantAfford(totalCost);
+        if (!creativeMode) {
+            const totalCost = COSTS.conveyor + treeClearCost(idx);
+            if (money < totalCost) return cantAfford(totalCost);
+            if (!clearTree(c, r)) return cantAfford(totalCost);
+        } else {
+            clearTree(c, r);
+        }
         conveyors[idx] = 1;
-        money -= COSTS.conveyor;
+        if (!creativeMode) money -= COSTS.conveyor;
         counts.conveyor++;
         if (isOnScreen(c, r)) sfx('conveyor');
         return true;
@@ -3118,7 +3514,7 @@
 
     function placeTree(c, r) {
         if (isGameEnded()) return false;
-        if (!bankPlaced) { lockToast('🏦 Place your Bank first!'); return false; }
+        if (!bankPlaced && !creativeMode) { lockToast('🏦 Place your Bank first!'); return false; }
         if (c < 0 || c >= W || r < 0 || r >= H) return false;
         const idx = r * W + c;
         if (buildings[idx] !== null || roads[idx] || conveyors[idx]) {
@@ -3137,11 +3533,121 @@
             lockToast('🌲 There is already a tree here.');
             return false;
         }
-        if (money < COSTS.tree) return cantAfford(COSTS.tree);
-        money -= COSTS.tree;
+        if (!creativeMode && money < COSTS.tree) return cantAfford(COSTS.tree);
+        if (!creativeMode) money -= COSTS.tree;
         trees[idx] = newTree;
         if (isOnScreen(c, r)) sfx('tree');
         return true;
+    }
+
+    function placeTerrainTile(terrainType, c, r) {
+        if (!creativeMode) return false;
+        if (c < 0 || c >= W || r < 0 || r >= H) return false;
+        const idx = r * W + c;
+
+        if (buildings[idx] !== null) {
+            const b = buildings[idx];
+            if (b.type === 'bank') {
+                lockToast('🏦 Cannot replace the Bank tile!');
+                return false;
+            }
+            const list = buildingLists[b.type];
+            const li = list.findIndex(item => item.c === c && item.r === r);
+            if (li !== -1) list.splice(li, 1);
+            buildings[idx] = null;
+            if (counts[b.type]) counts[b.type]--;
+            if (b.type === 'granary' || b.type === 'farm') farmNetworkDirty = true;
+            if (b.type === 'firestation') {
+                for (const eng of b.engines) {
+                    const gi = fireEngines.indexOf(eng);
+                    if (gi !== -1) fireEngines.splice(gi, 1);
+                }
+            }
+            if (b.type === 'factory') {
+                for (let vi = supplyVans.length - 1; vi >= 0; vi--) {
+                    const v = supplyVans[vi];
+                    if (v.factoryC === c && v.factoryR === r) supplyVans.splice(vi, 1);
+                }
+            }
+        }
+        if (roads[idx]) { roads[idx] = 0; bridges[idx] = 0; counts.road--; }
+        if (conveyors[idx]) { conveyors[idx] = 0; counts.conveyor--; }
+        trees[idx] = TREE_NONE;
+
+        if (terrainType !== 'mountain') {
+            for (let i = volcanoes.length - 1; i >= 0; i--) {
+                if (volcanoes[i].c === c && volcanoes[i].r === r) volcanoes.splice(i, 1);
+            }
+        }
+
+        ttype[idx] = terrainType;
+
+        if (isOnScreen(c, r)) sfx('terrain');
+        recalcPopulation();
+        return true;
+    }
+
+    function placeVolcano(c, r) {
+        if (!creativeMode) return false;
+        if (c < 0 || c >= W || r < 0 || r >= H) return false;
+        const idx = r * W + c;
+        if (ttype[idx] !== 'mountain') {
+            lockToast('🌋 Volcanoes can only be placed on Mountain tiles!');
+            return false;
+        }
+        for (const v of volcanoes) {
+            if (v.c === c && v.r === r) {
+                lockToast('🌋 There is already a volcano here!');
+                return false;
+            }
+        }
+        volcanoes.push({
+            c, r,
+            eruptTimer: 6 + Math.random() * 10,
+            erupting: false, eruptDuration: 0
+        });
+        if (isOnScreen(c, r)) sfx('volcano');
+        toast('🌋 Volcano placed — it will erupt soon!');
+        return true;
+    }
+
+    function handleTerrainPlacement(toolKey, c, r) {
+        if (toolKey === 'volcano') {
+            placeVolcano(c, r);
+            return;
+        }
+        const tt = TERRAIN_TOOL_MAP[toolKey];
+        if (tt) placeTerrainTile(tt, c, r);
+    }
+
+    // ============================================================
+    // MANUAL DISASTER SPAWNING (CREATIVE)
+    // ============================================================
+    function spawnManualDisaster(type, c, r) {
+        if (!creativeMode) return;
+        const cx = c * TILE + TILE / 2;
+        const cy = r * TILE + TILE / 2;
+        let dx, dy;
+        if (type === 'airplane') {
+            if (Math.random() < 0.5) { dx = Math.random() < 0.5 ? 1 : -1; dy = 0; }
+            else { dx = 0; dy = Math.random() < 0.5 ? 1 : -1; }
+        } else {
+            const angle = Math.random() * Math.PI * 2;
+            dx = Math.cos(angle);
+            dy = Math.sin(angle);
+        }
+        const disaster = {
+            type, x: cx, y: cy, dx, dy,
+            speed: DISASTER_SPEED[type],
+            health: DISASTER_BASE_HEALTH[type],
+            maxHealth: DISASTER_BASE_HEALTH[type],
+            radius: DISASTER_RADIUS[type],
+            damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0,
+            manual: true
+        };
+        disasters.push(disaster);
+        sfx(type === 'airplane' ? 'airplane' : 'disaster_spawn');
+        toast('💥 ' + type.toUpperCase() + ' spawned!');
     }
 
     function placeHouse(c, r) { return placeBuilding('house', c, r); }
@@ -3171,7 +3677,7 @@
             const type = b.type;
 
             if (type === 'bank') {
-                if (refund) {
+                if (refund && !creativeMode) {
                     lockToast('🏦 You cannot demolish your Bank!');
                     return false;
                 }
@@ -3180,7 +3686,7 @@
                 if (i !== -1) list.splice(i, 1);
                 buildings[idx] = null;
                 if (counts[type]) counts[type]--;
-                triggerGameOver();
+                if (!creativeMode) triggerGameOver();
                 return true;
             }
 
@@ -3189,7 +3695,7 @@
                 return false;
             }
 
-            if (refund) money += COSTS[type] * 0.5;
+            if (refund && !creativeMode) money += COSTS[type] * 0.5;
             if (counts[type]) counts[type]--;
             if (type === 'granary' || type === 'farm') farmNetworkDirty = true;
             if (type === 'firestation') {
@@ -3213,17 +3719,17 @@
             removed = true;
         }
         if (roads[idx]) {
-            if (refund) money += COSTS.road * 0.5;
+            if (refund && !creativeMode) money += COSTS.road * 0.5;
             roads[idx] = 0;
             bridges[idx] = 0;
             counts.road--;
             removed = true;
         }
-        if (conveyors[idx]) { if (refund) money += COSTS.conveyor * 0.5; conveyors[idx] = 0; counts.conveyor--; removed = true; }
+        if (conveyors[idx]) { if (refund && !creativeMode) money += COSTS.conveyor * 0.5; conveyors[idx] = 0; counts.conveyor--; removed = true; }
         if (trees[idx]) { trees[idx] = TREE_NONE; removed = true; }
         if (removed) {
             if (isOnScreen(c, r)) sfx('bulldoze');
-            if (refund) toast('💰 Refunded 50% for removal!');
+            if (refund && !creativeMode) toast('💰 Refunded 50% for removal!');
             recalcPopulation();
         }
         return removed;
@@ -3243,7 +3749,7 @@
     }
 
     function checkWinCondition() {
-        if (gameWon || gameOver || freePlay) return;
+        if (gameWon || gameOver || freePlay || creativeMode) return;
         if (achieved.size >= TOTAL_ACHIEVEMENTS) {
             triggerWin();
         }
@@ -3675,38 +4181,39 @@
         return path;
     }
 
-    function findFireStationTargetBFS(stationC, stationR, mode, exclude) {
-        const stationAdj = getAdjacentRoads(stationC, stationR);
-        if (stationAdj.length === 0) return null;
-        const q = [...stationAdj];
-        const vis = new Set(stationAdj.map(([c, r]) => c + ',' + r));
+    // ============================================================
+    // FIREWATCH / FIREFIGHTER PRIORITY HELPERS
+    // ============================================================
+    // Find the closest firewatch tower whose radius covers the given tile.
+    function findFirewatchForTile(c, r) {
+        let best = null, bestDist = Infinity;
+        for (const fw of buildingLists.firewatch) {
+            const radius = (fw.b && fw.b.radius) || FIREWATCH_RADIUS;
+            const d = dist(c, r, fw.c, fw.r);
+            if (d <= radius && d < bestDist) {
+                bestDist = d;
+                best = fw;
+            }
+        }
+        return best;
+    }
+
+    // Build a path to a specific building via roads. The path ends at the road
+    // tile adjacent to the target (the engine stops next to the building).
+    function findPathToBuildingOnRoads(startC, startR, targetC, targetR) {
+        const startAdj = getAdjacentRoads(startC, startR);
+        if (startAdj.length === 0) return null;
+        const q = [...startAdj];
+        const vis = new Set(startAdj.map(([c, r]) => c + ',' + r));
         const parent = {};
-        stationAdj.forEach(([c, r]) => parent[c + ',' + r] = null);
+        startAdj.forEach(([c, r]) => parent[c + ',' + r] = null);
         while (q.length) {
             const [cc, cr] = q.shift();
             const ck = cc + ',' + cr;
             for (const [dx, dy] of DIRS4) {
                 const nc = cc + dx, nr = cr + dy;
-                if (nc < 0 || nc >= W || nr < 0 || nr >= H) continue;
-                const nb = buildings[nr * W + nc];
-                if (!nb) continue;
-                const key = nc + ',' + nr;
-                if (exclude && exclude.has(key)) continue;
-                if (mode === 'fire' && nb.burning) {
-                    return { targetC: nc, targetR: nr, targetKind: 'building', path: [[stationC, stationR], ...pathFromParent(parent, ck)] };
-                }
-                if (mode === 'granary' && nb.type === 'granary') {
-                    const gkey = nc + ',' + nr;
-                    let hasBurningFarm = false;
-                    for (const f of buildingLists.farm) {
-                        if (f.b.source === gkey && f.b.burning) { hasBurningFarm = true; break; }
-                    }
-                    if (hasBurningFarm || nb.burning) {
-                        return { targetC: nc, targetR: nr, targetKind: 'granary', path: [[stationC, stationR], ...pathFromParent(parent, ck)] };
-                    }
-                }
-                if (mode === 'collapsed' && nb.type === 'house' && nb.collapsed) {
-                    return { targetC: nc, targetR: nr, targetKind: 'collapsed', path: [[stationC, stationR], ...pathFromParent(parent, ck)] };
+                if (nc === targetC && nr === targetR) {
+                    return [[startC, startR], ...pathFromParent(parent, ck)];
                 }
             }
             for (const [nx, ny] of getAdjacentRoads(cc, cr)) {
@@ -3717,14 +4224,146 @@
         return null;
     }
 
-    // Priority: whole granary networks (clears all burning farms in one trip) →
-    // closest individual fire → collapsed houses.
+    // Attempt to route the engine to a firewatch tower covering (targetC,targetR).
+    // Returns a firewatch-route descriptor, or null if no firewatch/route applies.
+    function buildFirewatchRoute(stationC, stationR, targetC, targetR, exclude) {
+        const fw = findFirewatchForTile(targetC, targetR);
+        if (!fw) return null;
+        const fwKey = fw.c + ',' + fw.r;
+        if (exclude && exclude.has(fwKey)) return null;
+        const path = findPathToFirewatch(stationC, stationR, fw.c, fw.r);
+        if (!path) return null;
+        return {
+            targetC: fw.c, targetR: fw.r,
+            targetKind: 'firewatch',
+            path: path,
+            firewatchRadius: (fw.b && fw.b.radius) || FIREWATCH_RADIUS
+        };
+    }
+
+    // New firefighter priority:
+    //   1) Bank (always first) — route through a covering Firewatch if possible.
+    //   2) Closest burning thing (by road distance) — route through a covering
+    //      Firewatch if possible. Burning farms are routed via their Granary so
+    //      the whole farm network is extinguished at once.
+    //   3) Granary (for burning farm networks) — fallback.
+    //   4) Collapsed house — lowest priority.
     function findBurningTargetForFireStation(stationC, stationR, exclude) {
-        let target = findFireStationTargetBFS(stationC, stationR, 'granary', exclude);
-        if (target) return target;
-        target = findFireStationTargetBFS(stationC, stationR, 'fire', exclude);
-        if (target) return target;
-        return findFireStationTargetBFS(stationC, stationR, 'collapsed', exclude);
+        const stationAdj = getAdjacentRoads(stationC, stationR);
+        if (stationAdj.length === 0) return null;
+
+        const q = [...stationAdj];
+        const vis = new Set(stationAdj.map(([c, r]) => c + ',' + r));
+        const parent = {};
+        stationAdj.forEach(([c, r]) => parent[c + ',' + r] = null);
+
+        const candidates = [];
+        const seen = new Set();
+
+        while (q.length) {
+            const [cc, cr] = q.shift();
+            const ck = cc + ',' + cr;
+            const roadPath = pathFromParent(parent, ck);
+
+            for (const [dx, dy] of DIRS4) {
+                const nc = cc + dx, nr = cr + dy;
+                if (nc < 0 || nc >= W || nr < 0 || nr >= H) continue;
+                const nb = buildings[nr * W + nc];
+                if (!nb) continue;
+                const key = nc + ',' + nr;
+                if (seen.has(key)) continue;
+                if (exclude && exclude.has(key)) continue;
+
+                let kind = null;
+                if (nb.burning) {
+                    if (nb.type === 'bank') kind = 'bank';
+                    else if (nb.type === 'farm' && nb.source) kind = 'farm';
+                    else kind = 'burning';
+                } else if (nb.type === 'granary') {
+                    const gkey = nc + ',' + nr;
+                    for (const f of buildingLists.farm) {
+                        if (f.b.source === gkey && f.b.burning) { kind = 'granary'; break; }
+                    }
+                } else if (nb.type === 'house' && nb.collapsed) {
+                    kind = 'collapsed';
+                }
+
+                if (kind) {
+                    seen.add(key);
+                    candidates.push({
+                        targetC: nc, targetR: nr,
+                        kind: kind,
+                        building: nb,
+                        path: [[stationC, stationR], ...roadPath],
+                        dist: roadPath.length
+                    });
+                }
+            }
+
+            for (const [nx, ny] of getAdjacentRoads(cc, cr)) {
+                const nk = nx + ',' + ny;
+                if (!vis.has(nk)) { vis.add(nk); parent[nk] = ck; q.push([nx, ny]); }
+            }
+        }
+
+        if (candidates.length === 0) return null;
+
+        // 1) BANK — always highest priority
+        const banks = candidates.filter(c => c.kind === 'bank');
+        if (banks.length > 0) {
+            const bank = banks[0];
+            const fwRoute = buildFirewatchRoute(stationC, stationR, bank.targetC, bank.targetR, exclude);
+            if (fwRoute) return fwRoute;
+            return { targetC: bank.targetC, targetR: bank.targetR, targetKind: 'building', path: bank.path };
+        }
+
+        // 2) CLOSEST BURNING THING (farms routed via their Granary network)
+        const burnings = candidates
+            .filter(c => c.kind === 'burning' || c.kind === 'farm')
+            .sort((a, b) => a.dist - b.dist);
+        if (burnings.length > 0) {
+            const t = burnings[0];
+            if (t.kind === 'farm' && t.building.source) {
+                const parts = t.building.source.split(',');
+                const gc = parseInt(parts[0], 10), gr = parseInt(parts[1], 10);
+                if (!isNaN(gc) && !isNaN(gr)) {
+                    const gKey = gc + ',' + gr;
+                    if (!(exclude && exclude.has(gKey))) {
+                        const gPath = findPathToBuildingOnRoads(stationC, stationR, gc, gr);
+                        if (gPath) {
+                            const fwRoute = buildFirewatchRoute(stationC, stationR, gc, gr, exclude);
+                            if (fwRoute) return fwRoute;
+                            return { targetC: gc, targetR: gr, targetKind: 'granary', path: gPath };
+                        }
+                    }
+                }
+            }
+            const fwRoute = buildFirewatchRoute(stationC, stationR, t.targetC, t.targetR, exclude);
+            if (fwRoute) return fwRoute;
+            return { targetC: t.targetC, targetR: t.targetR, targetKind: 'building', path: t.path };
+        }
+
+        // 3) GRANARY (for burning farm networks)
+        const granaries = candidates
+            .filter(c => c.kind === 'granary')
+            .sort((a, b) => a.dist - b.dist);
+        if (granaries.length > 0) {
+            const t = granaries[0];
+            const fwRoute = buildFirewatchRoute(stationC, stationR, t.targetC, t.targetR, exclude);
+            if (fwRoute) return fwRoute;
+            return { targetC: t.targetC, targetR: t.targetR, targetKind: 'granary', path: t.path };
+        }
+
+        // 4) COLLAPSED HOUSE — lowest priority
+        const collapsed = candidates
+            .filter(c => c.kind === 'collapsed')
+            .sort((a, b) => a.dist - b.dist);
+        if (collapsed.length > 0) {
+            const t = collapsed[0];
+            return { targetC: t.targetC, targetR: t.targetR, targetKind: 'collapsed', path: t.path };
+        }
+
+        return null;
     }
 
     function extinguishFarmsInGranaryNetwork(granaryC, granaryR) {
@@ -3741,16 +4380,11 @@
                 }
             }
         }
-        // Also clear farms connected to this granary via the same network (not just the controller)
         for (const f of buildingLists.farm) {
             if (!f.b.burning) continue;
-            // is this farm in the same network as the granary?
             let connected = false;
             for (const g of buildingLists.granary) {
                 if (g.c !== granaryC || g.r !== granaryR) continue;
-                // quick adjacency-network check: a farm is in the network if its
-                // source granary is this granary OR any adjacent farm chain links them
-                // (we approximate with source check + direct adjacency chain)
                 connected = true;
             }
             if (connected) {
@@ -3843,10 +4477,13 @@
     }
 
     function updateFireStations(dt) {
+        // --- Firewatch detection: dispatch an engine to the tower ---
         for (const watchEntry of buildingLists.firewatch) {
             const { c: wc, r: wr, b: wb } = watchEntry;
             const hasBurning = checkBurningInRadius(wc, wr, wb.radius || FIREWATCH_RADIUS);
             if (hasBurning) {
+                // Don't dispatch a duplicate engine to the same tower
+                if (fireEngines.some(e => e.targetC === wc && e.targetR === wr && e.state !== 'returning')) continue;
                 const station = findNearestAvailableFireStationForFirewatch(wc, wr);
                 if (station) {
                     const path = findPathToFirewatch(station.c, station.r, wc, wr);
@@ -3854,6 +4491,7 @@
                         const engine = {
                             stationC: station.c, stationR: station.r,
                             targetC: wc, targetR: wr,
+                            targetKind: 'firewatch',
                             path: path, pathIndex: 0, progress: 0,
                             state: 'going_to_firewatch', timer: 0,
                             x: station.c * TILE + TILE / 2, y: station.r * TILE + TILE / 2,
@@ -3868,6 +4506,7 @@
             }
         }
 
+        // --- Fire stations: dispatch engines using the new priority logic ---
         for (const entry of buildingLists.firestation) {
             const { c, r, b } = entry;
             if ((b.occupancy || 0) <= 0) continue;
@@ -3877,10 +4516,22 @@
             b.engines = b.engines.filter(eng => fireEngines.includes(eng));
             const maxEngines = 2;
             if (b.engines.length < maxEngines && b.dispatchTimer <= 0) {
+                // Build the claimed set from all in-flight engines.
+                // If an engine is heading to a Firewatch, also claim every tile
+                // in that tower's radius so multiple engines don't pile onto
+                // the same coverage area.
                 const claimed = new Set();
                 for (const e of fireEngines) {
                     if (e.state === 'returning') continue;
                     claimed.add(e.targetC + ',' + e.targetR);
+                    if (e.targetKind === 'firewatch' || e.state === 'going_to_firewatch' || e.state === 'extinguishing_radius') {
+                        const rad = e.firewatchRadius || FIREWATCH_RADIUS;
+                        for (let dr = -rad; dr <= rad; dr++) {
+                            for (let dc = -rad; dc <= rad; dc++) {
+                                claimed.add((e.targetC + dc) + ',' + (e.targetR + dr));
+                            }
+                        }
+                    }
                 }
                 const target = findBurningTargetForFireStation(c, r, claimed);
                 if (target) {
@@ -3889,7 +4540,9 @@
                         targetC: target.targetC, targetR: target.targetR,
                         targetKind: target.targetKind || 'building',
                         path: target.path, pathIndex: 0, progress: 0,
-                        state: 'going_to_fire', timer: 0,
+                        state: target.targetKind === 'firewatch' ? 'going_to_firewatch' : 'going_to_fire',
+                        timer: 0,
+                        firewatchRadius: target.firewatchRadius,
                         x: c * TILE + TILE / 2, y: r * TILE + TILE / 2
                     };
                     fireEngines.push(engine);
@@ -3899,6 +4552,7 @@
             }
         }
 
+        // --- Process each engine's state machine ---
         for (let i = fireEngines.length - 1; i >= 0; i--) {
             const eng = fireEngines[i];
             const stationB = buildings[eng.stationR * W + eng.stationC];
@@ -3921,7 +4575,7 @@
             } else if (eng.state === 'extinguishing_radius') {
                 eng.timer -= dt;
                 if (eng.timer <= 0) {
-                    extinguishBurningInRadius(eng.targetC, eng.targetR, eng.firewatchRadius);
+                    extinguishBurningInRadius(eng.targetC, eng.targetR, eng.firewatchRadius || FIREWATCH_RADIUS);
                     eng.state = 'returning';
                     eng.pathIndex = eng.path.length - 1;
                     eng.progress = 0;
@@ -4314,8 +4968,15 @@
         }
     }
 
+    // Only count NON-manual disasters toward the natural spawn cap.
+    function getNaturalDisasterCount() {
+        let n = 0;
+        for (const d of disasters) if (!d.manual) n++;
+        return n;
+    }
+
     function spawnDisaster() {
-        if (disasters.length >= MAX_DISASTERS) return;
+        if (getNaturalDisasterCount() >= getMaxDisasters()) return;
         const types = ['tornado', 'firestorm', 'airplane'];
         const type = types[Math.floor(Math.random() * types.length)];
         const edge = Math.floor(Math.random() * 4);
@@ -4327,10 +4988,9 @@
         else { x = CW + 30; y = Math.random() * CH; dx = -1; dy = (Math.random() - 0.5) * 0.5; }
         if (type === 'airplane') { if (edge === 0 || edge === 1) { dx = 0; dy = edge === 0 ? 1 : -1; } else { dx = edge === 2 ? 1 : -1; dy = 0; } }
         const len = Math.sqrt(dx*dx+dy*dy) || 1; dx /= len; dy /= len;
-        const disaster = { type, x, y, dx, dy, speed, health: DISASTER_BASE_HEALTH[type], maxHealth: DISASTER_BASE_HEALTH[type], radius: DISASTER_RADIUS[type], damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0 };
+        const disaster = { type, x, y, dx, dy, speed, health: DISASTER_BASE_HEALTH[type], maxHealth: DISASTER_BASE_HEALTH[type], radius: DISASTER_RADIUS[type], damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0, manual: false };
         disasters.push(disaster);
 
-        // Big alert + siren on the very first disaster of the game
         if (!firstDisasterAlertShown) {
             firstDisasterAlertShown = true;
             showDisasterAlert();
@@ -4638,6 +5298,10 @@
     }
 
     function openLoanModal() {
+        if (creativeMode) {
+            toast('🎨 Creative mode — you already have infinite money!');
+            return;
+        }
         const modal = document.getElementById('loan-modal');
         if (!modal) return;
         if (!bankPlaced) return;
@@ -4664,6 +5328,10 @@
     function takeLoan(amount) {
         if (loan) return;
         if (!bankPlaced) return;
+        if (creativeMode) {
+            toast('🎨 Creative mode — no loans needed!');
+            return;
+        }
         const totalRepay = Math.round(amount * LOAN_INTEREST_MULTIPLIER);
         const perMin = Math.ceil(totalRepay / LOAN_DURATION_MINUTES);
         loan = { total: totalRepay, remaining: totalRepay, perMin: perMin, borrowed: amount };
@@ -4676,6 +5344,7 @@
 
     function processLoanPayment() {
         if (!loan) return;
+        if (creativeMode) { loan = null; return; }
         const payment = Math.min(loan.perMin, loan.remaining);
         money -= payment;
         loan.remaining -= payment;
@@ -4693,7 +5362,7 @@
     function updateUI() {
         window.__bankPlaced = bankPlaced;
         const moneyEl = document.getElementById('money-display');
-        if (moneyEl) moneyEl.textContent = bankPlaced ? ('$' + Math.floor(money)) : '---';
+        if (moneyEl) moneyEl.textContent = creativeMode ? '∞' : (bankPlaced ? ('$' + Math.floor(money)) : '---');
         document.getElementById('pop-display').textContent = pop;
         document.getElementById('happy-display').textContent = happy + '%';
         const incomeEl = document.getElementById('income-display');
@@ -4706,7 +5375,7 @@
         }
         const loanStat = document.getElementById('loan-stat');
         if (loanStat) {
-            if (loan) {
+            if (loan && !creativeMode) {
                 loanStat.classList.remove('hidden');
                 document.getElementById('loan-display').textContent = '$' + loan.perMin + '/min';
                 const paid = loan.total - loan.remaining;
@@ -4942,13 +5611,10 @@
             ctx.lineTo(bx + 1.4, by - 1.4);
             ctx.stroke();
         } else if (type === 'workers') {
-            // Improved worker silhouette — matches the "requires worker" tooltip icon
             ctx.fillStyle = '#ffffff';
-            // head
             ctx.beginPath();
             ctx.arc(bx, by - 1.05, 0.95, 0, Math.PI * 2);
             ctx.fill();
-            // torso
             ctx.beginPath();
             ctx.moveTo(bx - 1.15, by + 1.95);
             ctx.lineTo(bx - 1.0, by - 0.05);
@@ -4956,7 +5622,6 @@
             ctx.lineTo(bx + 1.15, by + 1.95);
             ctx.closePath();
             ctx.fill();
-            // arms
             ctx.fillRect(bx - 2.0, by - 0.05, 0.85, 0.55);
             ctx.fillRect(bx + 1.15, by - 0.05, 0.85, 0.55);
         } else {
@@ -5802,8 +6467,6 @@
         }
 
         for (const t of foodTrucks) {
-            // While loading at the granary the food truck is hidden — it only
-            // appears once it starts driving out with its cargo.
             if (t.state === 'loading') continue;
             let angle = 0;
             if (t.state === 'returning') {
@@ -5858,6 +6521,13 @@
             const hpW = 30, hpH = 4; const hpX = px - hpW / 2, hpY = py - 20;
             ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(hpX - 1, hpY - 1, hpW + 2, hpH + 2);
             ctx.fillStyle = d.health / d.maxHealth > 0.5 ? '#5ef2b3' : d.health / d.maxHealth > 0.25 ? '#ffd93d' : '#ff6b6b'; ctx.fillRect(hpX, hpY, hpW * (d.health / d.maxHealth), hpH);
+            if (d.manual) {
+                ctx.fillStyle = '#ff5e7e';
+                ctx.font = 'bold 7px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('MANUAL', px, hpY - 4);
+                ctx.textAlign = 'left';
+            }
             if (d.type === 'tornado') { const baseRadius = d.radius * 0.6; for (let i = 0; i < 3; i++) { const angle = d.rot + i * Math.PI * 2 / 3; const xOff = Math.cos(angle) * baseRadius * 0.5; const yOff = Math.sin(angle) * baseRadius * 0.5; ctx.fillStyle = `rgba(200,200,200,${0.4 - i*0.1})`; ctx.beginPath(); ctx.ellipse(px + xOff, py + yOff - 5, d.radius * 0.4, d.radius * 0.7, angle, 0, Math.PI * 2); ctx.fill(); } ctx.fillStyle = 'rgba(150,150,150,0.8)'; ctx.beginPath(); ctx.arc(px, py - 3, d.radius * 0.3, 0, Math.PI * 2); ctx.fill(); for (let i = 0; i < 5; i++) { const angle = d.rot * 2 + i * Math.PI * 2 / 5; const dist2 = d.radius * 0.8; const dx = px + Math.cos(angle) * dist2; const dy = py - 5 + Math.sin(angle) * dist2 * 0.5; ctx.fillStyle = '#8a8a8a'; ctx.fillRect(dx - 1, dy - 1, 2, 2); } }
             else if (d.type === 'firestorm') { for (let i = 0; i < 5; i++) { const radius = d.radius * (0.5 + Math.random() * 0.2); const xOff = (Math.random() - 0.5) * d.radius * 0.8; const yOff = -Math.abs(Math.sin(d.animTimer * 3 + i)) * d.radius * 0.5; ctx.fillStyle = `rgba(255,${100 + Math.floor(Math.random()*50)},0,${0.5 + Math.random()*0.3})`; ctx.beginPath(); ctx.arc(px + xOff, py + yOff, radius, 0, Math.PI * 2); ctx.fill(); } ctx.fillStyle = 'rgba(255,200,0,0.6)'; ctx.beginPath(); ctx.arc(px, py - 5, d.radius * 0.4, 0, Math.PI * 2); ctx.fill(); }
             else if (d.type === 'airplane') { const angle = Math.atan2(d.dy, d.dx); ctx.save(); ctx.translate(px, py); ctx.rotate(angle); ctx.fillStyle = '#b0b0b0'; ctx.fillRect(-12, -3, 24, 6); ctx.fillStyle = '#888'; ctx.fillRect(-6, -6, 4, 12); ctx.fillRect(2, -6, 4, 12); ctx.fillStyle = '#888'; ctx.fillRect(-14, -4, 3, 8); ctx.fillStyle = '#555'; ctx.fillRect(8, -6, 2, 12); ctx.fillRect(7, -2, 4, 4); if (d.flash) { ctx.fillStyle = '#ff0000'; ctx.fillRect(5, -5, 2, 2); } ctx.restore(); }
@@ -5888,8 +6558,8 @@
         }
         for (const f of fireworks) { ctx.fillStyle = f.color; ctx.globalAlpha = f.life * 0.8; ctx.beginPath(); ctx.arc(f.x, f.y, 4 * f.life + 1, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; }
 
-        let showSadEmoji = false, showAngryEmoji = false;
-        let sadEmojiPos = null, angryEmojiPos = null;
+        let showSadEmoji = false, showAngryEmoji = false, showUnhappyEmoji = false;
+        let sadEmojiPos = null, angryEmojiPos = null, unhappyEmojiPos = null;
         let emojiSize = 16;
         if (hc >= sc && hc <= ec && hr >= sr && hr <= er) {
             const idx = hr * W + hc;
@@ -5911,7 +6581,7 @@
                         rangeRed = FACTORY_RED_RANGE;
                         showSadEmoji = true;
                         showAngryEmoji = true;
-                        emojiSize = 28;   // bigger unhappy emojis for factories
+                        emojiSize = 28;
                         break;
                     case 'firewatch': range = b.radius || FIREWATCH_RADIUS; rangeColor = 'rgba(255,165,0,0.25)'; borderColor = 'rgba(255,140,0,0.9)'; break;
                     case 'house':
@@ -5919,6 +6589,8 @@
                             range = ABANDONED_HAPPINESS_RADIUS;
                             rangeColor = 'rgba(255,100,100,0.22)';
                             borderColor = 'rgba(255,80,80,0.9)';
+                            showUnhappyEmoji = true;
+                            emojiSize = 28;
                         }
                         break;
                 }
@@ -5928,6 +6600,7 @@
                     ctx.fillStyle = rangeColor; ctx.fillRect(left, top, right - left, bottom - top);
                     ctx.strokeStyle = borderColor; ctx.lineWidth = 2; ctx.strokeRect(left + 1, top + 1, right - left - 2, bottom - top - 2);
                     if (showSadEmoji) sadEmojiPos = { x: left, y: top };
+                    if (showUnhappyEmoji) unhappyEmojiPos = { x: left, y: top };
                 }
                 if (rangeRed) {
                     const rLeft = Math.max(0, (hc - rangeRed) * TILE), rTop = Math.max(0, (hr - rangeRed) * TILE);
@@ -5950,7 +6623,7 @@
                 }
             }
 
-            if (tool && tool !== TOOLS.NONE && tool !== TOOLS.BULLDOZE) {
+            if (tool && tool !== TOOLS.NONE && tool !== TOOLS.BULLDOZE && !TERRAIN_TOOLS.has(tool) && !DISASTER_TOOLS.has(tool)) {
                 const pv = TOOL_PREVIEW[tool];
                 if (pv && canPlace(hc, hr)) {
                     const pPos = drawRangeRect(hc, hr, pv.range, pv.fill, pv.stroke);
@@ -5970,6 +6643,7 @@
 
         if (sadEmojiPos) drawRangeEmoji(sadEmojiPos.x, sadEmojiPos.y, '😟', emojiSize);
         if (angryEmojiPos) drawRangeEmoji(angryEmojiPos.x, angryEmojiPos.y, '😡', emojiSize);
+        if (unhappyEmojiPos) drawRangeEmoji(unhappyEmojiPos.x, unhappyEmojiPos.y, '😡', emojiSize);
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
@@ -6068,23 +6742,43 @@
         }
     }
 
-    // ------------------------------------------------------------
-    // Click handling — bank click works with ANY tool selected
-    // ------------------------------------------------------------
+    function isCreativeTerrainTool(t) { return TERRAIN_TOOLS.has(t); }
+
     function handlePlaceAction(c, r) {
         if (c < 0 || c >= W || r < 0 || r >= H) return;
+
+        // Creative disaster spawners — unlimited, no tile restrictions
+        if (creativeMode && DISASTER_TOOLS.has(tool)) {
+            const type = tool.substring('disaster_'.length);
+            if (type === 'tornado' || type === 'firestorm' || type === 'airplane') {
+                spawnManualDisaster(type, c, r);
+            }
+            return;
+        }
 
         const idx = r * W + c;
         const existing = buildings[idx];
 
-        // Clicking a Bank always opens the loan menu (except Bulldoze, which just refuses).
+        if (creativeMode && isCreativeTerrainTool(tool)) {
+            handleTerrainPlacement(tool, c, r);
+            return;
+        }
+
         if (existing && existing.type === 'bank') {
             if (tool === TOOLS.BULLDOZE) {
+                if (creativeMode) {
+                    bulldoze(c, r);
+                    return;
+                }
                 lockToast('🏦 You cannot demolish your Bank!');
                 return;
             }
             if (tool === TOOLS.BANK) {
-                lockToast('🏦 You already have a Bank!');
+                if (creativeMode) {
+                    lockToast('🏦 That tile already has a Bank!');
+                } else {
+                    lockToast('🏦 You already have a Bank!');
+                }
                 return;
             }
             openLoanModal();
@@ -6208,7 +6902,6 @@
     canvas.addEventListener('touchend', () => { mDown = false; pinchD = 0; }, { passive: false });
 
     document.addEventListener('keydown', (e) => {
-        // Space = pause / unpause
         if (e.code === 'Space' || e.key === ' ') {
             e.preventDefault();
             if (e.repeat) return;
@@ -6220,7 +6913,7 @@
         keys[key] = true;
         if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) e.preventDefault();
         if (!gameStarted || isGameEnded() || gamePaused) return;
-        if (key === 'b' && bankPlaced) return;
+        if (key === 'b' && bankPlaced && !creativeMode) return;
         const map = { 'b': TOOLS.BANK, '1': TOOLS.HOUSE, '2': TOOLS.SHOP, '3': TOOLS.FACTORY, '4': TOOLS.ROAD, '5': TOOLS.CONVEYOR, '6': TOOLS.PARK, '7': TOOLS.CINEMA, '8': TOOLS.SCHOOL, '9': TOOLS.TURRET, '0': TOOLS.FIRESTATION, '-': TOOLS.BULLDOZE, '[': TOOLS.WAREHOUSE, ']': TOOLS.LAVA_HARVESTER, 't': TOOLS.FIREWATCH, 'g': TOOLS.GRANARY, 'f': TOOLS.FARM, 'v': TOOLS.STORMDEFENDER, 'y': TOOLS.ARCADE, 'r': TOOLS.TREE };
         if (map[key]) {
             const t = map[key];
@@ -6234,7 +6927,6 @@
     });
     document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
-    // ---------- Tooltip rendering ----------
     const tooltipEl = document.getElementById('button-tooltip');
 
     function buildTooltipHTML(btn) {
@@ -6255,7 +6947,6 @@
         html += '<div class="tt-desc">' + desc + '</div>';
         html += '<div class="tt-stats">Cost: <b>' + cost + '</b></div>';
 
-        // Requirements
         const reqs = TOOL_REQ_ICONS[key] || [];
         html += '<div class="tt-row tt-req-row"><span class="tt-row-label">Requires</span><span class="tt-row-icons">';
         if (reqs.length === 0) {
@@ -6265,7 +6956,6 @@
         }
         html += '</span></div>';
 
-        // Produces
         const prods = TOOL_PRODUCES[key] || [];
         html += '<div class="tt-row tt-prod-row"><span class="tt-row-label">Produces</span><span class="tt-row-icons">';
         if (prods.length === 0) {
@@ -6341,6 +7031,80 @@
         });
     });
 
+    // ---------- SETTINGS MODAL ----------
+    function updateSettingsUI() {
+        const toggle = document.getElementById('natural-disasters-toggle');
+        const note = document.getElementById('settings-creative-note');
+        const row = document.getElementById('settings-natural-row');
+        const soundToggle = document.getElementById('sound-toggle');
+        if (soundToggle) soundToggle.checked = !!soundEnabled;
+        if (toggle) {
+            toggle.checked = !!naturalDisastersEnabled;
+            toggle.disabled = !creativeMode;
+        }
+        if (note) {
+            note.style.display = creativeMode ? 'none' : 'block';
+        }
+        if (row) {
+            row.style.opacity = creativeMode ? '1' : '0.55';
+        }
+    }
+
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            const modal = document.getElementById('settings-modal');
+            if (!modal) return;
+            updateSettingsUI();
+            modal.classList.add('open');
+        });
+    }
+    const closeSettingsBtn = document.getElementById('close-settings-modal');
+    if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', () => document.getElementById('settings-modal').classList.remove('open'));
+    }
+    const settingsModal = document.getElementById('settings-modal');
+    if (settingsModal) {
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) settingsModal.classList.remove('open');
+        });
+    }
+    const naturalToggle = document.getElementById('natural-disasters-toggle');
+    if (naturalToggle) {
+        naturalToggle.addEventListener('change', () => {
+            if (!creativeMode) {
+                naturalToggle.checked = !!naturalDisastersEnabled;
+                toast('🌪️ Natural Disasters are always on in Normal Mode.');
+                return;
+            }
+            naturalDisastersEnabled = !!naturalToggle.checked;
+            toast(naturalDisastersEnabled
+                ? '🌪️ Natural disasters ENABLED — they can now spawn in Creative.'
+                : '🌪️ Natural disasters DISABLED.');
+        });
+    }
+    const soundToggle = document.getElementById('sound-toggle');
+    if (soundToggle) {
+        soundToggle.addEventListener('change', () => {
+            soundEnabled = !!soundToggle.checked;
+            if (soundEnabled) {
+                // Confirm with a little chime
+                initAudio();
+                tone(660, 0.08, 'sine', 0.10);
+                setTimeout(() => tone(880, 0.12, 'triangle', 0.09), 80);
+            }
+        });
+    }
+
+    // Expose a couple of helpers so other scripts can respect the sound toggle.
+    window.__getSoundEnabled = function () { return soundEnabled; };
+    window.__playUiClick = function () {
+        if (!soundEnabled) return;
+        initAudio();
+        tone(520, 0.06, 'sine', 0.08);
+        setTimeout(() => tone(680, 0.08, 'triangle', 0.06), 45);
+    };
+
     function resetGame() {
         const modal = document.getElementById('gameover-modal');
         if (modal) modal.classList.remove('open');
@@ -6406,6 +7170,8 @@
         hc = -1; hr = -1; mDown = false; cam.panning = false;
         lastPlacedTile = { c: -1, r: -1 };
         camTween = null;
+
+        naturalDisastersEnabled = !creativeMode;
 
         tool = TOOLS.BANK;
         document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === 'bank'));
@@ -6498,8 +7264,11 @@
         if (keys['d'] || keys['arrowright']) cam.ox -= panSpeed * dt;
         clampCamera();
 
-        // Disasters start spawning after DISASTER_START_DELAY seconds (8 min)
-        if (bankPlaced && time > DISASTER_START_DELAY) {
+        // Natural disasters:
+        //   Normal mode  → always active (requires bank)
+        //   Creative mode → opt-in via settings (default OFF)
+        const naturalDisastersActive = naturalDisastersEnabled && (bankPlaced || creativeMode);
+        if (naturalDisastersActive && time > DISASTER_START_DELAY) {
             disasterTimer -= dt;
             if (disasterTimer <= 0) {
                 const count = 1 + Math.floor(Math.random() * 3);
@@ -6508,8 +7277,6 @@
             }
         }
 
-        // Farm network is recomputed periodically so farms always follow
-        // the closest operational granary and contamination stays accurate.
         farmNetTimer -= dt;
         if (farmNetworkDirty || farmNetTimer <= 0) {
             farmNetworkDirty = false;
@@ -6517,6 +7284,7 @@
             recomputeFarmNetwork();
         }
 
+        // Always update volcanoes (even in creative mode) so placed ones erupt.
         updateVolcanoes(dt);
         updateLavaHarvesters(dt);
         updateRivers(dt);
@@ -6547,12 +7315,15 @@
         updateUI();
     }
 
-    window.__startGame = function(selectedSize) {
+    window.__startGame = function(selectedSize, mode) {
         if (gameStarted) return;
         W = selectedSize;
         H = selectedSize;
         CW = W * TILE;
         CH = H * TILE;
+
+        creativeMode = (mode === 'creative');
+        document.body.classList.toggle('creative-mode', creativeMode);
 
         terrain = new Float32Array(W * H);
         ttype = new Array(W * H);
@@ -6608,6 +7379,9 @@
         camTween = null;
         tool = TOOLS.BANK;
 
+        // Default: natural disasters ON in normal, OFF in creative
+        naturalDisastersEnabled = !creativeMode;
+
         SEED = Math.floor(Math.random() * 999999);
         genTerrain();
         resizeCanvas();
@@ -6619,7 +7393,11 @@
         updateUI();
         syncPauseUI();
         gameStarted = true;
-        toast('🏦 Place your Bank to begin! It\'s free.');
+        if (creativeMode) {
+            toast('🎨 Creative mode — everything unlocked, infinite money!');
+        } else {
+            toast('🏦 Place your Bank to begin! It\'s free.');
+        }
         lastT = performance.now();
         lastFrameTime = 0;
         acc = 0;
@@ -6649,29 +7427,154 @@
     if (!sizeModal) return;
     var introModal = document.getElementById('intro-modal');
     var continueBtn = document.getElementById('intro-continue-btn');
+    var customPanel = document.getElementById('custom-size-panel');
+    var customInput = document.getElementById('custom-size-input');
+    var customStartBtn = document.getElementById('custom-start-btn');
 
-    function openIntro() {
-        if (introModal) introModal.classList.add('open');
+    var selectedMode = 'normal';
+
+    // ---- Menu click sound helper ----
+    var menuCtx = null;
+    function playMenuClick() {
+        if (typeof window.__getSoundEnabled === 'function' && !window.__getSoundEnabled()) return;
+        try {
+            if (!menuCtx) menuCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (menuCtx.state === 'suspended') menuCtx.resume();
+            var when = menuCtx.currentTime;
+            var o = menuCtx.createOscillator();
+            var g = menuCtx.createGain();
+            o.type = 'sine';
+            o.frequency.setValueAtTime(560, when);
+            g.gain.setValueAtTime(0.07, when);
+            g.gain.exponentialRampToValueAtTime(0.0001, when + 0.09);
+            o.connect(g);
+            g.connect(menuCtx.destination);
+            o.start(when);
+            o.stop(when + 0.10);
+            // Little second note for a satisfying "click"
+            var o2 = menuCtx.createOscillator();
+            var g2 = menuCtx.createGain();
+            var when2 = when + 0.055;
+            o2.type = 'triangle';
+            o2.frequency.setValueAtTime(760, when2);
+            g2.gain.setValueAtTime(0.05, when2);
+            g2.gain.exponentialRampToValueAtTime(0.0001, when2 + 0.09);
+            o2.connect(g2);
+            g2.connect(menuCtx.destination);
+            o2.start(when2);
+            o2.stop(when2 + 0.10);
+        } catch (_) {}
+    }
+
+    document.querySelectorAll('.mode-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            playMenuClick();
+            document.querySelectorAll('.mode-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            selectedMode = btn.dataset.mode || 'normal';
+        });
+    });
+
+    function clampCustom(v) {
+        if (isNaN(v)) return 200;
+        return Math.max(20, Math.min(500, Math.floor(v)));
+    }
+
+    function startGameWithSize(size, mode) {
+        sizeModal.classList.remove('open');
+        if (typeof window.__startGame === 'function') {
+            window.__startGame(size, mode);
+        }
+        if (typeof window.__pauseGame === 'function') {
+            window.__pauseGame(true);
+        }
+        openIntro(mode);
+    }
+
+    function openIntro(mode) {
+        if (!introModal) return;
+        var bodyEl = introModal.querySelector('.intro-body');
+        var titleEl = document.getElementById('intro-title');
+        var iconEl = document.getElementById('intro-icon');
+        var btn = document.getElementById('intro-continue-btn');
+        if (mode === 'creative') {
+            if (titleEl) titleEl.textContent = 'Creative Mode';
+            if (iconEl) iconEl.textContent = '🎨';
+            if (bodyEl) bodyEl.innerHTML =
+                '<p style="margin-bottom:12px;">' +
+                    '<strong style="color:var(--accent2);">1 · Everything is unlocked.</strong><br>' +
+                    'Build any building, road, conveyor or tree without restrictions. Place as many Banks as you like.' +
+                '</p>' +
+                '<p style="margin-bottom:12px;">' +
+                    '<strong style="color:var(--gold);">2 · Infinite money.</strong><br>' +
+                    'Costs are ignored — place whatever you want, wherever you want. You can even delete your Bank.' +
+                '</p>' +
+                '<p style="margin-bottom:12px;">' +
+                    '<strong style="color:var(--accent);">3 · Paint & spawn.</strong><br>' +
+                    'Use the <strong>🌍 Terrain</strong> tab to paint tiles and the <strong>💥 Disasters</strong> tab to spawn tornadoes, firestorms and airplanes — with no limit.' +
+                '</p>' +
+                '<p style="margin-bottom:0;">' +
+                    '<strong style="color:var(--gold);">4 · ⚙️ Settings.</strong><br>' +
+                    'Natural disasters are <strong>OFF</strong> by default in Creative. Open the ⚙️ menu to turn them on, or toggle sound on/off.' +
+                '</p>';
+            if (btn) btn.textContent = '▶ Continue — Start Building';
+        } else {
+            if (titleEl) titleEl.textContent = 'Welcome to Tile Game';
+            if (iconEl) iconEl.textContent = '🏦';
+            if (bodyEl) bodyEl.innerHTML =
+                '<p style="margin-bottom:12px;">' +
+                    '<strong style="color:var(--gold);">1 · Place your Bank first.</strong><br>' +
+                    'Click on your bank to take a loan.' +
+                '</p>' +
+                '<p style="margin-bottom:12px;">' +
+                    '<strong style="color:var(--accent);">2 · Protect your Bank.</strong><br>' +
+                    'If a disaster destroys your Bank, you lose the game. Build defences to defend the bank.' +
+                '</p>' +
+                '<p style="margin-bottom:0;">' +
+                    '<strong style="color:var(--accent2);">3 · How to win.</strong><br>' +
+                    'Unlock <strong>every achievement</strong> (see the 🏆 button in the top bar) to complete the valley and claim victory. Press <strong>Space</strong> to pause at any time.' +
+                '</p>';
+            if (btn) btn.textContent = '▶ Continue — Place my Bank';
+        }
+        introModal.classList.add('open');
     }
 
     sizeModal.querySelectorAll('.size-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var size = parseInt(btn.dataset.size, 10);
-            if (isNaN(size)) size = 100;
-            sizeModal.classList.remove('open');
-
-            if (typeof window.__startGame === 'function') {
-                window.__startGame(size);
+            playMenuClick();
+            var sizeVal = btn.dataset.size;
+            if (sizeVal === 'custom') {
+                if (customPanel) customPanel.style.display = 'block';
+                if (customInput) setTimeout(function () { customInput.focus(); }, 30);
+                return;
             }
-            if (typeof window.__pauseGame === 'function') {
-                window.__pauseGame(true);
-            }
-            openIntro();
+            var size = parseInt(sizeVal, 10);
+            if (isNaN(size)) size = 150;
+            startGameWithSize(size, selectedMode);
         });
     });
 
+    if (customStartBtn) {
+        customStartBtn.addEventListener('click', function () {
+            playMenuClick();
+            var v = clampCustom(parseInt(customInput ? customInput.value : '200', 10));
+            if (customInput) customInput.value = v;
+            startGameWithSize(v, selectedMode);
+        });
+    }
+
+    if (customInput) {
+        customInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (customStartBtn) customStartBtn.click();
+            }
+        });
+    }
+
     if (continueBtn) {
         continueBtn.addEventListener('click', function () {
+            playMenuClick();
             if (introModal) introModal.classList.remove('open');
             if (typeof window.__pauseGame === 'function') {
                 window.__pauseGame(false);
@@ -6692,6 +7595,8 @@
         services: ['park', 'cinema', 'arcade', 'school'],
         transport: ['road', 'conveyor', 'warehouse'],
         safety: ['firestation', 'firewatch', 'turret', 'stormdefender'],
+        terrain: ['terrain_deep', 'terrain_shallow', 'terrain_sand', 'terrain_grass', 'terrain_forest', 'terrain_taiga', 'terrain_mountain', 'terrain_mud', 'terrain_lava', 'terrain_hard_stone', 'volcano'],
+        disasters: ['disaster_tornado', 'disaster_firestorm', 'disaster_airplane'],
         tools: ['tree', 'bulldoze']
     };
     var toolToCat = {};
@@ -6714,6 +7619,7 @@
         } catch (_) {}
     }
     function uiTone(freq, dur, type, vol, delay) {
+        if (typeof window.__getSoundEnabled === 'function' && !window.__getSoundEnabled()) return;
         ensureCtx();
         if (!uiCtx) return;
         var when = uiCtx.currentTime + (delay || 0);

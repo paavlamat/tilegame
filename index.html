@@ -338,7 +338,6 @@
             box-shadow: 0 0 0 1px rgba(94,242,179,0.22), 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        /* Creative-only category tabs get a special glowing look */
         .cat-tab.cat-tab-special {
             background: linear-gradient(135deg, rgba(94,242,179,0.18), rgba(116,185,255,0.18));
             border-color: rgba(94,242,179,0.55);
@@ -464,7 +463,6 @@
             z-index: 2;
         }
 
-        /* ---- Creative Mode ---- */
         .creative-only { display: none; }
         body.creative-mode .creative-only { display: flex; }
 
@@ -873,6 +871,11 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 14px rgba(94,242,179,0.15);
         }
+        .size-btn.selected {
+            background: linear-gradient(180deg, rgba(94,242,179,0.16), rgba(94,242,179,0.06));
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 1px rgba(94,242,179,0.35), 0 4px 14px rgba(94,242,179,0.2);
+        }
         .size-btn .sb-icon { font-size: 26px; line-height: 1; }
         .size-btn .sb-info { flex: 1; }
         .size-btn .sb-name { font-weight: 800; font-size: 13px; }
@@ -937,7 +940,7 @@
         #custom-size-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         #custom-size-input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 2px rgba(94,242,179,0.15); }
 
-        #custom-start-btn {
+        #custom-start-btn, #normal-start-btn {
             width: 100%;
             padding: 10px 16px;
             border-radius: 8px;
@@ -951,10 +954,9 @@
             letter-spacing: 0.5px;
             transition: all 0.15s;
         }
-        #custom-start-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(94,242,179,0.5); }
-        #custom-start-btn:active { transform: translateY(0); }
+        #custom-start-btn:hover, #normal-start-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(94,242,179,0.5); }
+        #custom-start-btn:active, #normal-start-btn:active { transform: translateY(0); }
 
-        /* Toggle switch for settings */
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -999,6 +1001,24 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
+
+        #exit-menu-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #ff6b6b, #c0392b);
+            border: 1px solid #ff9a9a;
+            color: #fff;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+        }
+        #exit-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,80,80,0.5); }
+        #exit-menu-btn:active { transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -1147,6 +1167,12 @@
                 <span class="tb-cost">$10</span>
             </button>
 
+            <button class="tool-btn" data-tool="wall" data-desc="Stone wall that bounces disasters back. Adjacent walls connect together. Takes 2 hits to destroy — the first hit cracks it, the second shatters it.">
+                <span class="tb-key">K</span>
+                <span class="tb-icon">🧱</span>
+                <span class="tb-name">Wall</span>
+                <span class="tb-cost">$50</span>
+            </button>
             <button class="tool-btn" data-tool="firestation" data-desc="Sends 2 engines to fight fires and clear collapsed houses.">
                 <span class="tb-key">0</span>
                 <span class="tb-icon">🚒</span>
@@ -1228,7 +1254,6 @@
                 <span class="tb-cost">Free</span>
             </button>
 
-            <!-- Creative-only disaster spawners -->
             <button class="tool-btn creative-only" data-tool="disaster_tornado" data-desc="Spawns a Tornado where you click. Moves and damages like a natural one. No spawn limit.">
                 <span class="tb-icon">🌪️</span>
                 <span class="tb-name">Tornado</span>
@@ -1385,6 +1410,7 @@
                     <span class="toggle-slider"></span>
                 </label>
             </div>
+            <button id="exit-menu-btn">🚪 Exit to Main Menu</button>
         </div>
     </div>
 
@@ -1450,6 +1476,12 @@
                 </button>
             </div>
 
+            <div id="normal-size-panel" style="display: none; margin-top: 14px; padding: 12px; background: var(--panel-light); border-radius: 10px; border: 1px solid var(--border);">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Selected: Normal (150 × 150)</div>
+                <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px;">The classic Tile Game experience.</div>
+                <button id="normal-start-btn">🚀 Start Game</button>
+            </div>
+
             <div id="custom-size-panel" style="display: none; margin-top: 14px; padding: 12px; background: var(--panel-light); border-radius: 10px; border: 1px solid var(--border);">
                 <label for="custom-size-input" style="display: block; font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Map size (tiles × tiles)</label>
                 <input type="number" id="custom-size-input" min="20" max="500" value="200">
@@ -1475,7 +1507,6 @@
 
 <script>
 (function() {
-    // ---- GAME CONSTANTS ----
     const TILE = 16;
     let W = 150;
     let H = 150;
@@ -1514,7 +1545,7 @@
     const VAN_DISPATCH_INTERVAL = 1.0;
     const DISASTER_BASE_HEALTH = { tornado: 100, firestorm: 70, airplane: 60 };
     const DISASTER_SPEED = { tornado: 80, firestorm: 55, airplane: 160 };
-    const DISASTER_RADIUS = { tornado: 30, firestorm: 26, airplane: 12 };
+    const DISASTER_RADIUS = { tornado: 30, firestorm: 35, airplane: 12 };
     const DISASTER_START_DELAY = 480;
     const DISASTER_LIMIT_REF_TILES = 150 * 150;
     const DISASTER_LIMIT_REF_COUNT = 30;
@@ -1606,7 +1637,7 @@
         LAVA_HARVESTER: 'lavaharvester', ROAD: 'road', CONVEYOR: 'conveyor', PARK: 'park', CINEMA: 'cinema',
         ARCADE: 'arcade',
         SCHOOL: 'school', TURRET: 'turret', FIRESTATION: 'firestation', FIREWATCH: 'firewatch',
-        STORMDEFENDER: 'stormdefender', TREE: 'tree', BULLDOZE: 'bulldoze',
+        STORMDEFENDER: 'stormdefender', TREE: 'tree', BULLDOZE: 'bulldoze', WALL: 'wall',
         TERRAIN_DEEP: 'terrain_deep', TERRAIN_SHALLOW: 'terrain_shallow',
         TERRAIN_SAND: 'terrain_sand', TERRAIN_GRASS: 'terrain_grass',
         TERRAIN_FOREST: 'terrain_forest', TERRAIN_TAIGA: 'terrain_taiga',
@@ -1637,12 +1668,12 @@
 
     const COSTS = { bank: 0, house: 40, shop: 80, factory: 120, warehouse: 150, granary: 100, farm: 20,
         lavaharvester: 180, road: 5, conveyor: 10, park: 40, cinema: 150, arcade: 120, school: 200, turret: 150,
-        firestation: 250, firewatch: 500, stormdefender: 400, tree: 5,
+        firestation: 250, firewatch: 500, stormdefender: 400, tree: 5, wall: 50,
         terrain_deep: 0, terrain_shallow: 0, terrain_sand: 0, terrain_grass: 0, terrain_forest: 0,
         terrain_taiga: 0, terrain_mountain: 0, terrain_mud: 0, terrain_lava: 0, terrain_hard_stone: 0, volcano: 0,
         disaster_tornado: 0, disaster_firestorm: 0, disaster_airplane: 0 };
 
-    const SHOP_GATED_TOOLS = new Set(['factory', 'park', 'cinema', 'arcade', 'school', 'firestation', 'firewatch']);
+    const SHOP_GATED_TOOLS = new Set(['factory', 'park', 'cinema', 'arcade', 'school', 'firestation', 'firewatch', 'wall']);
 
     const TOOL_REQ_ICONS = {
         house: ['🛣️', '🏪'],
@@ -1665,6 +1696,7 @@
         bulldoze: [],
         bank: [],
         road: [],
+        wall: [],
         terrain_deep: [],
         terrain_shallow: [],
         terrain_sand: [],
@@ -1696,6 +1728,7 @@
         school:     [{ i: '🎓', n: 'House upgrades' }],
         road:       [{ i: '🔗', n: 'Connectivity' }],
         conveyor:   [{ i: '📦', n: 'Produce transport' }],
+        wall:       [{ i: '🛡️', n: 'Disaster bounce' }],
         firestation:[{ i: '🚒', n: 'Fire engines' }],
         firewatch:  [{ i: '🗼', n: 'Fire detection' }],
         turret:     [{ i: '🛡️', n: 'Disaster defense' }],
@@ -1743,7 +1776,6 @@
     const achieved = new Set();
     let actx = null;
 
-    // ---- SOUND FLAG ----
     let soundEnabled = true;
 
     const cam = { ox: 0, oy: 0, z: 1.0, minZ: 0.1, maxZ: 6.0, panning: false, px: 0, py: 0, pox: 0, poy: 0 };
@@ -1770,7 +1802,6 @@
     let shopBuilt = false;
     let firstDisasterAlertShown = false;
 
-    // Natural disasters toggle — true in normal mode, false by default in creative
     let naturalDisastersEnabled = true;
 
     let loan = null;
@@ -1843,6 +1874,9 @@
             case 'victory': tone(523,0.15,'sine',0.16); setTimeout(() => tone(659,0.15,'sine',0.16),140); setTimeout(() => tone(784,0.15,'sine',0.16),280); setTimeout(() => tone(1047,0.35,'triangle',0.15),430); break;
             case 'terrain': tone(440,0.06,'triangle',0.09); setTimeout(() => tone(600,0.08,'sine',0.07),50); break;
             case 'volcano': tone(120,0.3,'sawtooth',0.15); setTimeout(() => tone(70,0.5,'sine',0.12),100); break;
+            case 'wall_place': tone(340,0.08,'square',0.11); setTimeout(() => tone(460,0.1,'triangle',0.09),60); break;
+            case 'wall_bounce': tone(420,0.06,'square',0.13); setTimeout(() => tone(660,0.09,'triangle',0.11),40); break;
+            case 'wall_break': tone(200,0.14,'square',0.14); setTimeout(() => tone(120,0.22,'sine',0.12),70); break;
             case 'siren':
                 tone(880,0.34,'sawtooth',0.13);
                 setTimeout(() => tone(620,0.34,'sawtooth',0.13), 340);
@@ -1948,7 +1982,7 @@
 
     let pollutedTiles = new Set();
 
-    const buildingLists = { bank: [], house: [], shop: [], factory: [], warehouse: [], granary: [], farm: [], lavaharvester: [], park: [], cinema: [], arcade: [], school: [], turret: [], firestation: [], firewatch: [], stormdefender: [] };
+    const buildingLists = { bank: [], house: [], shop: [], factory: [], warehouse: [], granary: [], farm: [], lavaharvester: [], park: [], cinema: [], arcade: [], school: [], turret: [], firestation: [], firewatch: [], stormdefender: [], wall: [] };
     let particles = [], fireworks = [], disasters = [], projectiles = [], bombs = [], workers = [], fireEngines = [], volcanoes = [], supplyVans = [], foodTrucks = [], shoppers = [];
     let rivers = [];
     const hardStoneRestoreQueue = new Map();
@@ -1956,7 +1990,7 @@
     let pollutionTimer = 0;
     let foodTruckDispatchTimer = 0;
     let money = 1000, pop = 0, happy = 50, income = 0, tool = TOOLS.BANK, hc = -1, hr = -1, mDown = false, mBtn = 0, lastPlacedTile = { c: -1, r: -1 };
-    let counts = { bank: 0, house: 0, shop: 0, factory: 0, warehouse: 0, granary: 0, farm: 0, lavaharvester: 0, road: 0, conveyor: 0, park: 0, cinema: 0, arcade: 0, school: 0, turret: 0, firestation: 0, firewatch: 0, stormdefender: 0 }, time = 0, celebrating = false, celebrateTimer = 0, disasterTimer = 0;
+    let counts = { bank: 0, house: 0, shop: 0, factory: 0, warehouse: 0, granary: 0, farm: 0, lavaharvester: 0, road: 0, conveyor: 0, park: 0, cinema: 0, arcade: 0, school: 0, turret: 0, firestation: 0, firewatch: 0, stormdefender: 0, wall: 0 }, time = 0, celebrating = false, celebrateTimer = 0, disasterTimer = 0;
     const PAN_SPEED = 800;
     let keys = {};
     let schoolAssignTimer = 0;
@@ -2044,9 +2078,6 @@
         return x >= -20 && x <= canvas.width + 20 && y >= -20 && y <= canvas.height + 20;
     }
 
-    // ============================================================
-    // TERRAIN GENERATION
-    // ============================================================
     const F_MAIN = 0.055;
     const F_DETAIL = 0.130;
     const F_RIDGE = 0.150;
@@ -2231,9 +2262,6 @@
         }
     }
 
-    // ============================================================
-    // RIVER GENERATION
-    // ============================================================
     function generateRivers() {
         const total = W * H;
         const riverCount = Math.max(1, Math.floor(total / 8000));
@@ -2477,9 +2505,6 @@
         return false;
     }
 
-    // ============================================================
-    // GRANARY / FARM NETWORK
-    // ============================================================
     function isGranaryOperational(g) {
         if (!g || !g.b) return false;
         if (g.b.contaminated) return false;
@@ -2801,9 +2826,6 @@
         }
     }
 
-    // ============================================================
-    // FACTORY POLLUTION
-    // ============================================================
     function pollutionMaxAt(c, r, fc, fr) {
         if (dist(c, r, fc, fr) <= FACTORY_RED_RANGE) return POLLUTION_MAX_HEAVY;
         for (const other of buildingLists.factory) {
@@ -2905,9 +2927,6 @@
         cleanOneTile();
     }
 
-    // ============================================================
-    // HOUSE FEEDING / STARVATION / ABANDONMENT / REGROWTH
-    // ============================================================
     function spawnPopLossAnimation(c, r) {
         particles.push({
             x: c * TILE + TILE / 2,
@@ -2992,9 +3011,6 @@
         }
     }
 
-    // ============================================================
-    // FOOD TRUCKS (GRANARY -> SHOP)
-    // ============================================================
     function findShopNeedingFoodFromGranary(granaryC, granaryR) {
         const granaryAdj = getAdjacentRoads(granaryC, granaryR);
         if (granaryAdj.length === 0) return null;
@@ -3183,9 +3199,6 @@
         }
     }
 
-    // ============================================================
-    // SHOPPERS (HOUSE -> SHOP -> HOUSE)
-    // ============================================================
     function tryDispatchShopper(houseC, houseR, houseB) {
         if (houseB.shopperActive) return false;
         const houseAdj = getAdjacentRoads(houseC, houseR);
@@ -3266,9 +3279,6 @@
         }
     }
 
-    // ============================================================
-    // GAME OVER / WIN / LOCKING HELPERS
-    // ============================================================
     function triggerGameOver() {
         if (gameOver || gameWon) return;
         if (creativeMode) return;
@@ -3384,6 +3394,7 @@
         if (type === 'turret') { b.ammo = 0; b.maxAmmo = TURRET_AMMO_MAX; b.cooldown = 0; }
         if (type === 'stormdefender') { b.ammo = 0; b.maxAmmo = TORNADO_DEFENDER_AMMO_MAX; b.cooldown = 0; }
         if (type === 'lavaharvester') { b.collectTimer = LAVA_HARVEST_INTERVAL; b.ammo = 0; b.maxAmmo = LAVA_HARVESTER_PRODUCE_MAX; }
+        if (type === 'wall') { b.wallHealth = 2; b.maxWallHealth = 2; }
         if (type === 'house') {
             b.population = 1 + Math.floor(Math.random() * 4);
             b.maxPopulation = b.population;
@@ -3426,7 +3437,7 @@
         if (type === 'shop' && !shopBuilt) {
             shopBuilt = true;
             unlockedSomething = true;
-            toast('🏪 Shop built — Factories, Parks, Cinemas, Arcades, Schools, Fire Stations and Firewatch Towers unlocked!');
+            toast('🏪 Shop built — Factories, Parks, Cinemas, Arcades, Schools, Fire Stations, Firewatch Towers and Walls unlocked!');
         }
         if (type === 'factory' && !factoryBuilt) {
             factoryBuilt = true;
@@ -3453,7 +3464,10 @@
         }
 
         if (type === 'shop' || type === 'factory') happy = clamp(happy + 2, 0, 100);
-        if (isOnScreen(c, r)) sfx(type);
+        if (isOnScreen(c, r)) {
+            if (type === 'wall') sfx('wall_place');
+            else sfx(type);
+        }
 
         recalcPopulation();
         checkAchievements(type);
@@ -3620,9 +3634,6 @@
         if (tt) placeTerrainTile(tt, c, r);
     }
 
-    // ============================================================
-    // MANUAL DISASTER SPAWNING (CREATIVE)
-    // ============================================================
     function spawnManualDisaster(type, c, r) {
         if (!creativeMode) return;
         const cx = c * TILE + TILE / 2;
@@ -3643,6 +3654,7 @@
             maxHealth: DISASTER_BASE_HEALTH[type],
             radius: DISASTER_RADIUS[type],
             damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0,
+            wallCooldown: 0,
             manual: true
         };
         disasters.push(disaster);
@@ -3666,6 +3678,7 @@
     function placeFireWatch(c, r) { return placeBuilding('firewatch', c, r); }
     function placeStormDefender(c, r) { return placeBuilding('stormdefender', c, r); }
     function placeBank(c, r) { return placeBuilding('bank', c, r); }
+    function placeWall(c, r) { return placeBuilding('wall', c, r); }
 
     function bulldoze(c, r, refund = true) {
         if (c < 0 || c >= W || r < 0 || r >= H) return false;
@@ -3938,9 +3951,6 @@
         return false;
     }
 
-    // ============================================================
-    // WORKER DISPATCH
-    // ============================================================
     const WORKER_TARGET_TYPES = ['granary', 'firestation', 'shop', 'factory'];
 
     function trySendWorker(houseC, houseR, houseBuilding) {
@@ -4181,10 +4191,6 @@
         return path;
     }
 
-    // ============================================================
-    // FIREWATCH / FIREFIGHTER PRIORITY HELPERS
-    // ============================================================
-    // Find the closest firewatch tower whose radius covers the given tile.
     function findFirewatchForTile(c, r) {
         let best = null, bestDist = Infinity;
         for (const fw of buildingLists.firewatch) {
@@ -4198,8 +4204,6 @@
         return best;
     }
 
-    // Build a path to a specific building via roads. The path ends at the road
-    // tile adjacent to the target (the engine stops next to the building).
     function findPathToBuildingOnRoads(startC, startR, targetC, targetR) {
         const startAdj = getAdjacentRoads(startC, startR);
         if (startAdj.length === 0) return null;
@@ -4224,8 +4228,6 @@
         return null;
     }
 
-    // Attempt to route the engine to a firewatch tower covering (targetC,targetR).
-    // Returns a firewatch-route descriptor, or null if no firewatch/route applies.
     function buildFirewatchRoute(stationC, stationR, targetC, targetR, exclude) {
         const fw = findFirewatchForTile(targetC, targetR);
         if (!fw) return null;
@@ -4241,13 +4243,6 @@
         };
     }
 
-    // New firefighter priority:
-    //   1) Bank (always first) — route through a covering Firewatch if possible.
-    //   2) Closest burning thing (by road distance) — route through a covering
-    //      Firewatch if possible. Burning farms are routed via their Granary so
-    //      the whole farm network is extinguished at once.
-    //   3) Granary (for burning farm networks) — fallback.
-    //   4) Collapsed house — lowest priority.
     function findBurningTargetForFireStation(stationC, stationR, exclude) {
         const stationAdj = getAdjacentRoads(stationC, stationR);
         if (stationAdj.length === 0) return null;
@@ -4308,7 +4303,6 @@
 
         if (candidates.length === 0) return null;
 
-        // 1) BANK — always highest priority
         const banks = candidates.filter(c => c.kind === 'bank');
         if (banks.length > 0) {
             const bank = banks[0];
@@ -4317,7 +4311,6 @@
             return { targetC: bank.targetC, targetR: bank.targetR, targetKind: 'building', path: bank.path };
         }
 
-        // 2) CLOSEST BURNING THING (farms routed via their Granary network)
         const burnings = candidates
             .filter(c => c.kind === 'burning' || c.kind === 'farm')
             .sort((a, b) => a.dist - b.dist);
@@ -4343,7 +4336,6 @@
             return { targetC: t.targetC, targetR: t.targetR, targetKind: 'building', path: t.path };
         }
 
-        // 3) GRANARY (for burning farm networks)
         const granaries = candidates
             .filter(c => c.kind === 'granary')
             .sort((a, b) => a.dist - b.dist);
@@ -4354,7 +4346,6 @@
             return { targetC: t.targetC, targetR: t.targetR, targetKind: 'granary', path: t.path };
         }
 
-        // 4) COLLAPSED HOUSE — lowest priority
         const collapsed = candidates
             .filter(c => c.kind === 'collapsed')
             .sort((a, b) => a.dist - b.dist);
@@ -4477,12 +4468,10 @@
     }
 
     function updateFireStations(dt) {
-        // --- Firewatch detection: dispatch an engine to the tower ---
         for (const watchEntry of buildingLists.firewatch) {
             const { c: wc, r: wr, b: wb } = watchEntry;
             const hasBurning = checkBurningInRadius(wc, wr, wb.radius || FIREWATCH_RADIUS);
             if (hasBurning) {
-                // Don't dispatch a duplicate engine to the same tower
                 if (fireEngines.some(e => e.targetC === wc && e.targetR === wr && e.state !== 'returning')) continue;
                 const station = findNearestAvailableFireStationForFirewatch(wc, wr);
                 if (station) {
@@ -4506,7 +4495,6 @@
             }
         }
 
-        // --- Fire stations: dispatch engines using the new priority logic ---
         for (const entry of buildingLists.firestation) {
             const { c, r, b } = entry;
             if ((b.occupancy || 0) <= 0) continue;
@@ -4516,10 +4504,6 @@
             b.engines = b.engines.filter(eng => fireEngines.includes(eng));
             const maxEngines = 2;
             if (b.engines.length < maxEngines && b.dispatchTimer <= 0) {
-                // Build the claimed set from all in-flight engines.
-                // If an engine is heading to a Firewatch, also claim every tile
-                // in that tower's radius so multiple engines don't pile onto
-                // the same coverage area.
                 const claimed = new Set();
                 for (const e of fireEngines) {
                     if (e.state === 'returning') continue;
@@ -4552,7 +4536,6 @@
             }
         }
 
-        // --- Process each engine's state machine ---
         for (let i = fireEngines.length - 1; i >= 0; i--) {
             const eng = fireEngines[i];
             const stationB = buildings[eng.stationR * W + eng.stationC];
@@ -4968,7 +4951,6 @@
         }
     }
 
-    // Only count NON-manual disasters toward the natural spawn cap.
     function getNaturalDisasterCount() {
         let n = 0;
         for (const d of disasters) if (!d.manual) n++;
@@ -4988,7 +4970,7 @@
         else { x = CW + 30; y = Math.random() * CH; dx = -1; dy = (Math.random() - 0.5) * 0.5; }
         if (type === 'airplane') { if (edge === 0 || edge === 1) { dx = 0; dy = edge === 0 ? 1 : -1; } else { dx = edge === 2 ? 1 : -1; dy = 0; } }
         const len = Math.sqrt(dx*dx+dy*dy) || 1; dx /= len; dy /= len;
-        const disaster = { type, x, y, dx, dy, speed, health: DISASTER_BASE_HEALTH[type], maxHealth: DISASTER_BASE_HEALTH[type], radius: DISASTER_RADIUS[type], damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0, manual: false };
+        const disaster = { type, x, y, dx, dy, speed, health: DISASTER_BASE_HEALTH[type], maxHealth: DISASTER_BASE_HEALTH[type], radius: DISASTER_RADIUS[type], damageTimer: 0, bombTimer: 0, rot: 0, animTimer: 0, flash: 0, wallCooldown: 0, manual: false };
         disasters.push(disaster);
 
         if (!firstDisasterAlertShown) {
@@ -5010,6 +4992,45 @@
                 const c = Math.floor(d.x / TILE), r = Math.floor(d.y / TILE);
                 if (c >= 0 && c < W && r >= 0 && r < H && ttype[r * W + c] === 'mountain') { d.x = prevX; d.y = prevY; d.dx *= -1; d.dy *= -1; }
             }
+
+            // WALL COLLISION — bounces disasters back. Two hits destroy a wall.
+            if (d.wallCooldown > 0) d.wallCooldown -= dt;
+            if (d.wallCooldown <= 0) {
+                const wc = Math.floor(d.x / TILE), wr = Math.floor(d.y / TILE);
+                if (wc >= 0 && wc < W && wr >= 0 && wr < H) {
+                    const widx = wr * W + wc;
+                    const wb = buildings[widx];
+                    if (wb && wb.type === 'wall') {
+                        d.x = prevX;
+                        d.y = prevY;
+                        d.dx *= -1;
+                        d.dy *= -1;
+                        d.wallCooldown = 1.0;
+                        if (wb.wallHealth === undefined) wb.wallHealth = 2;
+                        wb.wallHealth -= 1;
+                        if (isWorldPosOnScreen(d.x, d.y)) sfx('wall_bounce');
+                        if (wb.wallHealth <= 0) {
+                            toast('🧱 Wall destroyed by the ' + d.type + '!');
+                            sfx('wall_break');
+                            for (let k = 0; k < 14; k++) {
+                                const a = Math.random() * Math.PI * 2;
+                                const sp = 30 + Math.random() * 70;
+                                particles.push({ x: wc*TILE+TILE/2, y: wr*TILE+TILE/2, vx: Math.cos(a)*sp, vy: Math.sin(a)*sp, life: 0.7, max: 0.7, size: 3, type: 'debris', color: (Math.random() < 0.5 ? '#a8a8a8' : '#7a6350') });
+                            }
+                            bulldoze(wc, wr, false);
+                        } else {
+                            toast('🧱 Wall bounced the ' + d.type + ' back! (50% damaged)');
+                            for (let k = 0; k < 8; k++) {
+                                const a = Math.random() * Math.PI * 2;
+                                const sp = 20 + Math.random() * 50;
+                                particles.push({ x: wc*TILE+TILE/2, y: wr*TILE+TILE/2, vx: Math.cos(a)*sp, vy: Math.sin(a)*sp, life: 0.5, max: 0.5, size: 2, type: 'spark', color: '#c8c8c8' });
+                            }
+                        }
+                        continue;
+                    }
+                }
+            }
+
             if (d.type !== 'airplane') {
                 if (d.x < 0 || d.x > CW) { d.dx *= -1; d.x = clamp(d.x, 0, CW); }
                 if (d.y < 0 || d.y > CH) { d.dy *= -1; d.y = clamp(d.y, 0, CH); }
@@ -5044,19 +5065,14 @@
                             }
                         }
                     } else {
+                        // Firestorm / airplane: only convert EXISTING trees to burned.
+                        // Do NOT spawn burned trees on empty tiles.
                         if (trees[idx] === TREE_NORMAL) {
                             trees[idx] = TREE_BURNED;
                         } else if (trees[idx] === TREE_TAIGA) {
                             trees[idx] = TREE_TAIGA_BURNED;
-                        } else if (trees[idx] === TREE_NONE && !roads[idx] && !buildings[idx] && !conveyors[idx] && !bridges[idx]) {
-                            const gt = ttype[idx];
-                            if ((gt === 'grass' || gt === 'forest') && Math.random() < 0.2) {
-                                trees[idx] = TREE_BURNED;
-                            } else if (gt === 'taiga' && Math.random() < 0.2) {
-                                trees[idx] = TREE_TAIGA_BURNED;
-                            }
                         }
-                        if (buildings[idx] && buildings[idx].type !== 'turret') {
+                        if (buildings[idx] && buildings[idx].type !== 'turret' && buildings[idx].type !== 'wall') {
                             const b = buildings[idx];
                             if (!b.burning) { b.burning = true; b.burnTimer = FIRE_BURN_DURATION; for (let j = 0; j < 5; j++) particles.push({ x: c * TILE + TILE / 2, y: r * TILE + TILE / 2, vx: (Math.random()-0.5)*20, vy: -20, life: 0.5, max: 0.5, size: 3, type: 'fire', color: '#ff4500' }); }
                         }
@@ -5082,7 +5098,7 @@
                     if (r >= 0 && r < H && c >= 0 && c < W) {
                         const idx = r * W + c;
                         if (trees[idx]) trees[idx] = TREE_NONE;
-                        if (buildings[idx] && buildings[idx].type !== 'turret') {
+                        if (buildings[idx] && buildings[idx].type !== 'turret' && buildings[idx].type !== 'wall') {
                             const bld = buildings[idx];
                             if (!bld.burning) { bld.burning = true; bld.burnTimer = FIRE_BURN_DURATION; }
                         }
@@ -5412,9 +5428,6 @@
         camTween = { fromOx, fromOy, fromZ, toOx, toOy, toZ, t: 0, dur: 0.6 };
     }
 
-    // ============================================================
-    // TILE TOOLTIP
-    // ============================================================
     const TERRAIN_INFO = {
         deep:       { icon: '🌊', name: 'Deep Water' },
         shallow:    { icon: '🌊', name: 'Shallow Water' },
@@ -5536,6 +5549,11 @@
             if (hasConv) txt += ' ⚙️ Conveyor supply OK';
         }
         if (b && b.type === 'turret') txt += ' | 🛡️ Turret';
+        if (b && b.type === 'wall') {
+            const hp = (b.wallHealth !== undefined ? b.wallHealth : 2);
+            txt += ' | 🧱 Wall [' + hp + '/2]' + (hp === 1 ? ' ⚠️ Damaged — will break on next hit!' : ' ✅ Intact');
+            txt += ' — bounces disasters back';
+        }
         if (b && b.type === 'school') {
             txt += ' | 🏫 School' + roadStatus();
             txt += ' 👷 ' + (b.schoolOccupancy || 0) + '/' + SCHOOL_MAX_HOUSES;
@@ -6373,6 +6391,68 @@
                     ctx.fill();
                     ctx.fillStyle = '#ffd93d'; ctx.fillRect(cx - 1, y + 5, 2, 4);
                 }
+                else if (b.type === 'wall') {
+                    // Wall — connects to adjacent walls, thin segments so it doesn't fill the whole tile.
+                    const hasN = r > 0 && buildings[(r-1)*W + c] && buildings[(r-1)*W + c].type === 'wall';
+                    const hasS = r < H-1 && buildings[(r+1)*W + c] && buildings[(r+1)*W + c].type === 'wall';
+                    const hasW2 = c > 0 && buildings[r*W + (c-1)] && buildings[r*W + (c-1)].type === 'wall';
+                    const hasE = c < W-1 && buildings[r*W + (c+1)] && buildings[r*W + (c+1)].type === 'wall';
+
+                    const damaged = (b.wallHealth !== undefined ? b.wallHealth : 2) <= 1;
+                    const stone = damaged ? '#7a6350' : '#a8a8a8';
+                    const stoneDark = damaged ? '#4a3828' : '#6e6e6e';
+                    const stoneLight = damaged ? '#9a8270' : '#c8c8c8';
+                    const wt = 5;
+                    const half = TILE / 2;
+                    const cbs = (hasN || hasS || hasW2 || hasE) ? 5 : 8;
+
+                    // Dark drop shadow under the wall
+                    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+                    if (hasN) ctx.fillRect(cx - wt/2 + 1, y + 1, wt, half);
+                    if (hasS) ctx.fillRect(cx - wt/2 + 1, cy + 1, wt, half);
+                    if (hasW2) ctx.fillRect(x + 1, cy - wt/2 + 1, half, wt);
+                    if (hasE) ctx.fillRect(cx + 1, cy - wt/2 + 1, half, wt);
+                    ctx.fillRect(cx - cbs/2 + 1, cy - cbs/2 + 1, cbs, cbs);
+
+                    // Base stone
+                    ctx.fillStyle = stone;
+                    if (hasN) ctx.fillRect(cx - wt/2, y, wt, half);
+                    if (hasS) ctx.fillRect(cx - wt/2, cy, wt, half);
+                    if (hasW2) ctx.fillRect(x, cy - wt/2, half, wt);
+                    if (hasE) ctx.fillRect(cx, cy - wt/2, half, wt);
+                    ctx.fillRect(cx - cbs/2, cy - cbs/2, cbs, cbs);
+
+                    // Darker bottom/right edges
+                    ctx.fillStyle = stoneDark;
+                    if (hasS) ctx.fillRect(cx - wt/2, y + TILE - 1, wt, 1);
+                    if (hasE) ctx.fillRect(x + TILE - 1, cy - wt/2, 1, wt);
+                    ctx.fillRect(cx - cbs/2, cy + cbs/2 - 1, cbs, 1);
+
+                    // Light top/left edges
+                    ctx.fillStyle = stoneLight;
+                    if (hasN) ctx.fillRect(cx - wt/2, y, wt, 1);
+                    if (hasW2) ctx.fillRect(x, cy - wt/2, half, 1);
+                    ctx.fillRect(cx - cbs/2, cy - cbs/2, cbs, 1);
+
+                    // Cracks if damaged
+                    if (damaged) {
+                        ctx.strokeStyle = '#2a1a10';
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(cx - 2, cy - 2);
+                        ctx.lineTo(cx + 1, cy + 1);
+                        ctx.moveTo(cx + 2, cy - 1);
+                        ctx.lineTo(cx - 1, cy + 2);
+                        if (hasN) { ctx.moveTo(cx, y + 3); ctx.lineTo(cx, y + 7); }
+                        if (hasS) { ctx.moveTo(cx, cy + 3); ctx.lineTo(cx, cy + 7); }
+                        if (hasW2) { ctx.moveTo(x + 3, cy); ctx.lineTo(x + 6, cy); }
+                        if (hasE) { ctx.moveTo(cx + 3, cy); ctx.lineTo(cx + 6, cy); }
+                        ctx.stroke();
+                        // Chipped corner
+                        ctx.fillStyle = '#2a1e12';
+                        ctx.fillRect(cx + cbs/2 - 2, cy - cbs/2, 1, 2);
+                    }
+                }
 
                 const badges = [];
                 if (ROAD_DEPENDENT[b.type] && getAdjacentRoads(c, r).length === 0) badges.push('road');
@@ -6747,7 +6827,6 @@
     function handlePlaceAction(c, r) {
         if (c < 0 || c >= W || r < 0 || r >= H) return;
 
-        // Creative disaster spawners — unlimited, no tile restrictions
         if (creativeMode && DISASTER_TOOLS.has(tool)) {
             const type = tool.substring('disaster_'.length);
             if (type === 'tornado' || type === 'firestorm' || type === 'airplane') {
@@ -6808,6 +6887,7 @@
             case TOOLS.FIRESTATION: placeFireStation(c, r); break;
             case TOOLS.FIREWATCH: placeFireWatch(c, r); break;
             case TOOLS.STORMDEFENDER: placeStormDefender(c, r); break;
+            case TOOLS.WALL: placeWall(c, r); break;
             default: break;
         }
     }
@@ -6914,7 +6994,7 @@
         if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) e.preventDefault();
         if (!gameStarted || isGameEnded() || gamePaused) return;
         if (key === 'b' && bankPlaced && !creativeMode) return;
-        const map = { 'b': TOOLS.BANK, '1': TOOLS.HOUSE, '2': TOOLS.SHOP, '3': TOOLS.FACTORY, '4': TOOLS.ROAD, '5': TOOLS.CONVEYOR, '6': TOOLS.PARK, '7': TOOLS.CINEMA, '8': TOOLS.SCHOOL, '9': TOOLS.TURRET, '0': TOOLS.FIRESTATION, '-': TOOLS.BULLDOZE, '[': TOOLS.WAREHOUSE, ']': TOOLS.LAVA_HARVESTER, 't': TOOLS.FIREWATCH, 'g': TOOLS.GRANARY, 'f': TOOLS.FARM, 'v': TOOLS.STORMDEFENDER, 'y': TOOLS.ARCADE, 'r': TOOLS.TREE };
+        const map = { 'b': TOOLS.BANK, '1': TOOLS.HOUSE, '2': TOOLS.SHOP, '3': TOOLS.FACTORY, '4': TOOLS.ROAD, '5': TOOLS.CONVEYOR, '6': TOOLS.PARK, '7': TOOLS.CINEMA, '8': TOOLS.SCHOOL, '9': TOOLS.TURRET, '0': TOOLS.FIRESTATION, '-': TOOLS.BULLDOZE, '[': TOOLS.WAREHOUSE, ']': TOOLS.LAVA_HARVESTER, 't': TOOLS.FIREWATCH, 'g': TOOLS.GRANARY, 'f': TOOLS.FARM, 'v': TOOLS.STORMDEFENDER, 'y': TOOLS.ARCADE, 'r': TOOLS.TREE, 'k': TOOLS.WALL };
         if (map[key]) {
             const t = map[key];
             if (isToolLocked(t)) {
@@ -7031,7 +7111,6 @@
         });
     });
 
-    // ---------- SETTINGS MODAL ----------
     function updateSettingsUI() {
         const toggle = document.getElementById('natural-disasters-toggle');
         const note = document.getElementById('settings-creative-note');
@@ -7088,7 +7167,6 @@
         soundToggle.addEventListener('change', () => {
             soundEnabled = !!soundToggle.checked;
             if (soundEnabled) {
-                // Confirm with a little chime
                 initAudio();
                 tone(660, 0.08, 'sine', 0.10);
                 setTimeout(() => tone(880, 0.12, 'triangle', 0.09), 80);
@@ -7096,7 +7174,16 @@
         });
     }
 
-    // Expose a couple of helpers so other scripts can respect the sound toggle.
+    // Exit to main menu — confirm then reload for a clean restart.
+    const exitMenuBtn = document.getElementById('exit-menu-btn');
+    if (exitMenuBtn) {
+        exitMenuBtn.addEventListener('click', () => {
+            const confirmed = confirm('Exit to the main menu?\n\nAny unsaved progress in the current world will be lost.');
+            if (!confirmed) return;
+            window.location.reload();
+        });
+    }
+
     window.__getSoundEnabled = function () { return soundEnabled; };
     window.__playUiClick = function () {
         if (!soundEnabled) return;
@@ -7264,9 +7351,6 @@
         if (keys['d'] || keys['arrowright']) cam.ox -= panSpeed * dt;
         clampCamera();
 
-        // Natural disasters:
-        //   Normal mode  → always active (requires bank)
-        //   Creative mode → opt-in via settings (default OFF)
         const naturalDisastersActive = naturalDisastersEnabled && (bankPlaced || creativeMode);
         if (naturalDisastersActive && time > DISASTER_START_DELAY) {
             disasterTimer -= dt;
@@ -7284,7 +7368,6 @@
             recomputeFarmNetwork();
         }
 
-        // Always update volcanoes (even in creative mode) so placed ones erupt.
         updateVolcanoes(dt);
         updateLavaHarvesters(dt);
         updateRivers(dt);
@@ -7379,7 +7462,6 @@
         camTween = null;
         tool = TOOLS.BANK;
 
-        // Default: natural disasters ON in normal, OFF in creative
         naturalDisastersEnabled = !creativeMode;
 
         SEED = Math.floor(Math.random() * 999999);
@@ -7428,12 +7510,13 @@
     var introModal = document.getElementById('intro-modal');
     var continueBtn = document.getElementById('intro-continue-btn');
     var customPanel = document.getElementById('custom-size-panel');
+    var normalPanel = document.getElementById('normal-size-panel');
     var customInput = document.getElementById('custom-size-input');
     var customStartBtn = document.getElementById('custom-start-btn');
+    var normalStartBtn = document.getElementById('normal-start-btn');
 
     var selectedMode = 'normal';
 
-    // ---- Menu click sound helper ----
     var menuCtx = null;
     function playMenuClick() {
         if (typeof window.__getSoundEnabled === 'function' && !window.__getSoundEnabled()) return;
@@ -7451,7 +7534,6 @@
             g.connect(menuCtx.destination);
             o.start(when);
             o.stop(when + 0.10);
-            // Little second note for a satisfying "click"
             var o2 = menuCtx.createOscillator();
             var g2 = menuCtx.createGain();
             var when2 = when + 0.055;
@@ -7545,14 +7627,22 @@
             var sizeVal = btn.dataset.size;
             if (sizeVal === 'custom') {
                 if (customPanel) customPanel.style.display = 'block';
+                if (normalPanel) normalPanel.style.display = 'none';
                 if (customInput) setTimeout(function () { customInput.focus(); }, 30);
                 return;
             }
-            var size = parseInt(sizeVal, 10);
-            if (isNaN(size)) size = 150;
-            startGameWithSize(size, selectedMode);
+            // Normal — show the normal start panel (don't start immediately)
+            if (normalPanel) normalPanel.style.display = 'block';
+            if (customPanel) customPanel.style.display = 'none';
         });
     });
+
+    if (normalStartBtn) {
+        normalStartBtn.addEventListener('click', function () {
+            playMenuClick();
+            startGameWithSize(150, selectedMode);
+        });
+    }
 
     if (customStartBtn) {
         customStartBtn.addEventListener('click', function () {
@@ -7594,7 +7684,7 @@
         food: ['granary', 'farm', 'shop'],
         services: ['park', 'cinema', 'arcade', 'school'],
         transport: ['road', 'conveyor', 'warehouse'],
-        safety: ['firestation', 'firewatch', 'turret', 'stormdefender'],
+        safety: ['wall', 'firestation', 'firewatch', 'turret', 'stormdefender'],
         terrain: ['terrain_deep', 'terrain_shallow', 'terrain_sand', 'terrain_grass', 'terrain_forest', 'terrain_taiga', 'terrain_mountain', 'terrain_mud', 'terrain_lava', 'terrain_hard_stone', 'volcano'],
         disasters: ['disaster_tornado', 'disaster_firestorm', 'disaster_airplane'],
         tools: ['tree', 'bulldoze']

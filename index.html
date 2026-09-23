@@ -246,6 +246,52 @@
             box-shadow: 0 0 12px rgba(255,217,61,0.55);
         }
 
+        #save-btn {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: 9px;
+            background: var(--btn-bg);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            transition: all 0.15s;
+            font-family: inherit;
+            position: relative;
+        }
+        #save-btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-1px);
+            border-color: rgba(255,255,255,0.25);
+            color: var(--accent2);
+        }
+        #save-btn:active { transform: translateY(0); }
+        #save-btn.saving {
+            background: linear-gradient(180deg, #5ef2b3, #2fbf85);
+            border-color: #a9ffe0;
+            color: #06281c;
+            box-shadow: 0 0 14px rgba(94,242,179,0.6);
+        }
+        #save-btn.saving::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 12px;
+            border: 2px solid rgba(94,242,179,0.7);
+            animation: savePulse 0.5s ease-out;
+            pointer-events: none;
+        }
+        @keyframes savePulse {
+            from { transform: scale(0.85); opacity: 1; }
+            to { transform: scale(1.35); opacity: 0; }
+        }
+
         #settings-btn {
             flex: 0 0 auto;
             display: flex;
@@ -801,6 +847,7 @@
         #win-modal .modal-content { border-color: var(--gold); box-shadow: 0 0 55px rgba(255,217,61,0.45); }
         #loan-modal .modal-content { border-color: var(--gold); box-shadow: 0 0 40px rgba(255,217,61,0.28); max-width: 420px; }
         #settings-modal .modal-content { border-color: var(--accent2); box-shadow: 0 0 40px rgba(94,242,179,0.25); max-width: 420px; }
+        #save-modal .modal-content { border-color: var(--accent2); box-shadow: 0 0 45px rgba(94,242,179,0.4); max-width: 400px; }
 
         #restart-btn, #win-restart-btn {
             padding: 9px 20px; border-radius: 9px;
@@ -891,6 +938,26 @@
             box-shadow: 0 4px 16px rgba(94,242,179,0.28);
         }
         .size-btn.size-btn-normal .sb-name { color: var(--accent2); }
+
+        .size-btn.size-btn-load-manual {
+            border-color: rgba(94,242,179,0.55);
+            background: linear-gradient(180deg, rgba(94,242,179,0.14), rgba(94,242,179,0.04));
+        }
+        .size-btn.size-btn-load-manual:hover {
+            border-color: var(--accent2);
+            box-shadow: 0 4px 16px rgba(94,242,179,0.35);
+        }
+        .size-btn.size-btn-load-manual .sb-name { color: var(--accent2); }
+
+        .size-btn.size-btn-load-auto {
+            border-color: rgba(116,185,255,0.55);
+            background: linear-gradient(180deg, rgba(116,185,255,0.14), rgba(116,185,255,0.04));
+        }
+        .size-btn.size-btn-load-auto:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 16px rgba(116,185,255,0.35);
+        }
+        .size-btn.size-btn-load-auto .sb-name { color: var(--blue); }
 
         .mode-btn {
             flex: 1;
@@ -1019,6 +1086,48 @@
         }
         #exit-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,80,80,0.5); }
         #exit-menu-btn:active { transform: translateY(0); }
+
+        #save-modal-ok {
+            padding: 10px 26px;
+            border-radius: 9px;
+            background: linear-gradient(180deg, #5ef2b3, #2fbf85);
+            border: 1px solid #a9ffe0;
+            color: #06281c;
+            font-weight: 800;
+            font-size: 12.5px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+        }
+        #save-modal-ok:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(94,242,179,0.5); }
+        #save-modal-ok:active { transform: translateY(0); }
+
+        #save-section-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0 12px;
+            color: var(--text-dim);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        #save-section-divider::before,
+        #save-section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        #load-section {
+            display: none;
+        }
+        #load-section.visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -1056,6 +1165,7 @@
         <button id="achievements-top-btn" title="Achievements" aria-label="Achievements">🏆</button>
         <button id="bank-nav-btn" title="Go to Bank" aria-label="Go to Bank">🏦</button>
         <button id="pause-btn" title="Pause Game" aria-label="Pause Game">⏸️</button>
+        <button id="save-btn" title="Save Game" aria-label="Save Game">💾</button>
         <button id="settings-btn" title="Settings" aria-label="Settings">⚙️</button>
         <button id="fullscreen-btn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
     </div>
@@ -1400,6 +1510,16 @@
                     <span class="toggle-slider"></span>
                 </label>
             </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--panel-light); border-radius:10px; border:1px solid var(--border); margin-bottom:10px;">
+                <div style="flex:1;">
+                    <div style="font-weight:800; font-size:13px; margin-bottom:2px;">💾 Autosave</div>
+                    <div style="font-size:10.5px; color:var(--text-dim); line-height:1.4;">Automatically save every 5 minutes. Only active in Normal Mode. Autosaves never overwrite manual saves.</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autosave-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
             <div id="settings-natural-row" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--panel-light); border-radius:10px; border:1px solid var(--border); transition: opacity 0.15s;">
                 <div style="flex:1;">
                     <div style="font-weight:800; font-size:13px; margin-bottom:2px;">🌪️ Natural Disasters</div>
@@ -1411,6 +1531,25 @@
                 </label>
             </div>
             <button id="exit-menu-btn">🚪 Exit to Main Menu</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="save-modal">
+        <div class="modal-content" style="text-align:center;">
+            <div style="font-size:46px; line-height:1; margin-bottom:6px;">💾</div>
+            <h2 style="color:var(--accent2); margin-bottom:12px; letter-spacing:0.5px;">Game Saved!</h2>
+            <div style="font-size:12.5px; line-height:1.7; color:var(--text-dim); text-align:left; padding:0 4px;">
+                <p style="margin-bottom:12px;">
+                    Your world has been saved to this browser.
+                </p>
+                <p style="margin-bottom:0;">
+                    <strong style="color:var(--gold);">To load it:</strong><br>
+                    1. Click <strong style="color:var(--accent);">🚪 Exit to Main Menu</strong> (in ⚙️ Settings)<br>
+                    2. Or restart the game<br>
+                    3. Then choose <strong style="color:var(--accent2);">📂 Load Latest Save</strong> on the main menu.
+                </p>
+            </div>
+            <button id="save-modal-ok" style="margin-top:18px;">Got it!</button>
         </div>
     </div>
 
@@ -1441,7 +1580,27 @@
             <h2 style="margin-bottom:6px;">🌍 New World</h2>
             <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 14px;">Choose a mode and world size.</p>
 
-            <div style="margin-bottom: 16px;">
+            <div id="load-section">
+                <div id="save-section-divider">Continue Saved Game</div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px;">
+                    <button class="size-btn size-btn-load-manual" id="load-manual-btn">
+                        <span class="sb-icon">📂</span>
+                        <div class="sb-info">
+                            <div class="sb-name">Load Latest Save</div>
+                            <div class="sb-dim" id="load-manual-info">Loading info…</div>
+                        </div>
+                    </button>
+                    <button class="size-btn size-btn-load-auto" id="load-autosave-btn">
+                        <span class="sb-icon">🔄</span>
+                        <div class="sb-info">
+                            <div class="sb-name">Load Latest Autosave</div>
+                            <div class="sb-dim" id="load-autosave-info">Loading info…</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 16px; margin-top: 4px;">
                 <div style="font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Game Mode</div>
                 <div style="display: flex; gap: 8px;">
                     <button class="mode-btn active" data-mode="normal">
@@ -1619,6 +1778,10 @@
 
     const FARM_NETWORK_RECOMPUTE_INTERVAL = 0.5;
 
+    const AUTOSAVE_INTERVAL = 300; // 5 minutes
+    const SAVE_KEY_MANUAL = 'tileGame_save_manual_v1';
+    const SAVE_KEY_AUTOSAVE = 'tileGame_save_autosave_v1';
+
     const DIRS4 = [[0, 1], [0, -1], [1, 0], [-1, 0]];
 
     const TREE_NONE = 0, TREE_NORMAL = 1, TREE_BURNED = 2, TREE_TAIGA = 3, TREE_TAIGA_BURNED = 4;
@@ -1777,6 +1940,8 @@
     let actx = null;
 
     let soundEnabled = true;
+    let autosaveEnabled = true;
+    let autosaveTimer = 0;
 
     const cam = { ox: 0, oy: 0, z: 1.0, minZ: 0.1, maxZ: 6.0, panning: false, px: 0, py: 0, pox: 0, poy: 0 };
     let camTween = null;
@@ -1877,6 +2042,7 @@
             case 'wall_place': tone(340,0.08,'square',0.11); setTimeout(() => tone(460,0.1,'triangle',0.09),60); break;
             case 'wall_bounce': tone(420,0.06,'square',0.13); setTimeout(() => tone(660,0.09,'triangle',0.11),40); break;
             case 'wall_break': tone(200,0.14,'square',0.14); setTimeout(() => tone(120,0.22,'sine',0.12),70); break;
+            case 'save': tone(660,0.1,'sine',0.14); setTimeout(() => tone(880,0.1,'triangle',0.12),90); setTimeout(() => tone(1100,0.14,'sine',0.1),180); break;
             case 'siren':
                 tone(880,0.34,'sawtooth',0.13);
                 setTimeout(() => tone(620,0.34,'sawtooth',0.13), 340);
@@ -7453,12 +7619,346 @@
         });
     });
 
+    // ============================================================
+    // SAVE / LOAD SYSTEM
+    // ============================================================
+    function serializeGame() {
+        // Serialize each building object (skip volatile/cyclic refs).
+        const buildingEntries = [];
+        for (let i = 0; i < W * H; i++) {
+            const b = buildings[i];
+            if (b === null) continue;
+            const copy = {};
+            for (const k in b) {
+                if (k === 'engines') continue; // regenerated on load
+                const v = b[k];
+                if (k === 'assignedHouses') {
+                    copy[k] = Array.isArray(v) ? v.map(h => ({ c: h.c, r: h.r })) : [];
+                } else if (typeof v === 'object' && v !== null) {
+                    // Skip any other object references we don't know about.
+                    continue;
+                } else {
+                    copy[k] = v;
+                }
+            }
+            buildingEntries.push({ idx: i, b: copy });
+        }
+
+        // Encode terrain-type array as short numeric codes to shrink size.
+        const TT_MAP = { deep: 0, shallow: 1, river: 2, mud: 3, sand: 4, grass: 5, forest: 6, taiga: 7, mountain: 8, lava: 9, hard_stone: 10 };
+        const ttypeEncoded = new Array(W * H);
+        for (let i = 0; i < W * H; i++) ttypeEncoded[i] = (TT_MAP[ttype[i]] !== undefined) ? TT_MAP[ttype[i]] : 5;
+
+        return {
+            version: 1,
+            W, H, SEED,
+            ttype: ttypeEncoded,
+            trees: Array.from(trees),
+            roads: Array.from(roads),
+            conveyors: Array.from(conveyors),
+            bridges: Array.from(bridges),
+            pollution: Array.from(pollution),
+            buildings: buildingEntries,
+            volcanoes: volcanoes.map(v => ({ c: v.c, r: v.r, eruptTimer: v.eruptTimer, erupting: v.erupting, eruptDuration: v.eruptDuration })),
+            rivers: rivers.map(r => ({
+                forwardPath: r.forwardPath.slice(),
+                extras: r.extras.slice(),
+                drying: r.drying,
+                dried: r.dried,
+                dryIndex: r.dryIndex,
+                dryStep: r.dryStep,
+                dryTimer: r.dryTimer
+            })),
+            money, pop, happy, income,
+            bankPlaced, gameOver, gameWon, freePlay,
+            factoryBuilt, shopBuilt, firstDisasterAlertShown,
+            loan: loan ? { total: loan.total, remaining: loan.remaining, perMin: loan.perMin, borrowed: loan.borrowed } : null,
+            counts: Object.assign({}, counts),
+            time, disasterTimer,
+            achieved: Array.from(achieved),
+            unlockedTools: Array.from(unlockedTools),
+            creativeMode,
+            naturalDisastersEnabled,
+            incomeHistory: incomeHistory.slice(),
+            incomeBlockTimer, incomeBlockEarnings,
+            savedAt: Date.now()
+        };
+    }
+
+    function deserializeGame(data) {
+        // ============================================================
+        // 1. Allocate arrays for the saved map size, then regenerate
+        //    the base terrain from the saved seed (this sets terrain,
+        //    ttype, trees, rivers, volcanoes deterministically), then
+        //    overwrite every mutable field with the saved values.
+        // ============================================================
+        W = data.W;
+        H = data.H;
+        CW = W * TILE;
+        CH = H * TILE;
+
+        creativeMode = !!data.creativeMode;
+        document.body.classList.toggle('creative-mode', creativeMode);
+
+        terrain = new Float32Array(W * H);
+        ttype = new Array(W * H);
+        trees = new Uint8Array(W * H);
+        buildings = new Array(W * H).fill(null);
+        roads = new Uint8Array(W * H);
+        conveyors = new Uint8Array(W * H);
+        bridges = new Uint8Array(W * H);
+        pollution = new Uint8Array(W * H);
+        pollutedTiles = new Set();
+
+        volcanoes.length = 0;
+        rivers.length = 0;
+        hardStoneRestoreQueue.clear();
+        Object.keys(buildingLists).forEach(k => { buildingLists[k].length = 0; });
+        workers.length = 0;
+        shoppers.length = 0;
+        disasters.length = 0;
+        particles.length = 0;
+        fireworks.length = 0;
+        projectiles.length = 0;
+        bombs.length = 0;
+        fireEngines.length = 0;
+        supplyVans.length = 0;
+        foodTrucks.length = 0;
+        riverCheckTimer = 0;
+        pollutionTimer = 0;
+        foodTruckDispatchTimer = 0;
+        farmNetTimer = 0;
+        Object.keys(counts).forEach(k => counts[k] = 0);
+
+        SEED = data.SEED;
+        genTerrain(); // rebuilds terrain / rivers / volcanoes for this seed
+
+        // ============================================================
+        // 2. Overwrite the mutable layers with saved state.
+        // ============================================================
+        const TT_REV = ['deep', 'shallow', 'river', 'mud', 'sand', 'grass', 'forest', 'taiga', 'mountain', 'lava', 'hard_stone'];
+        for (let i = 0; i < W * H; i++) {
+            const code = data.ttype[i];
+            if (code !== undefined && code !== null && TT_REV[code] !== undefined) ttype[i] = TT_REV[code];
+            trees[i] = data.trees[i] || 0;
+            roads[i] = data.roads[i] || 0;
+            conveyors[i] = data.conveyors[i] || 0;
+            bridges[i] = data.bridges[i] || 0;
+            pollution[i] = data.pollution[i] || 0;
+            if (pollution[i] > 0) pollutedTiles.add(i);
+        }
+
+        // ============================================================
+        // 3. Rebuild the buildings array + buildingLists.
+        // ============================================================
+        for (const entry of data.buildings) {
+            const idx = entry.idx;
+            const b = entry.b;
+            if (!b || !b.type) continue;
+            if (b.type === 'firestation') {
+                // Always restore a fresh engines array so bulldozer/etc. don't crash.
+                b.engines = [];
+                b.dispatchTimer = b.dispatchTimer || 0;
+            }
+            if (b.type === 'school' && !Array.isArray(b.assignedHouses)) b.assignedHouses = [];
+            buildings[idx] = b;
+            const c = idx % W;
+            const r = (idx - c) / W;
+            buildingLists[b.type].push({ c, r, b });
+        }
+
+        // ============================================================
+        // 4. Restore volcanoes and rivers from saved data (their
+        //    individual timers / drying states matter).
+        // ============================================================
+        volcanoes.length = 0;
+        if (Array.isArray(data.volcanoes)) {
+            for (const v of data.volcanoes) volcanoes.push({
+                c: v.c, r: v.r,
+                eruptTimer: v.eruptTimer,
+                erupting: !!v.erupting,
+                eruptDuration: v.eruptDuration || 0
+            });
+        }
+        rivers.length = 0;
+        if (Array.isArray(data.rivers)) {
+            for (const r of data.rivers) {
+                rivers.push({
+                    forwardPath: r.forwardPath.slice(),
+                    extras: r.extras.slice(),
+                    drying: !!r.drying,
+                    dried: !!r.dried,
+                    dryIndex: r.dryIndex | 0,
+                    dryStep: r.dryStep | 0,
+                    dryTimer: r.dryTimer || 0
+                });
+            }
+        }
+
+        // ============================================================
+        // 5. Restore scalar state.
+        // ============================================================
+        money = typeof data.money === 'number' ? data.money : 1000;
+        pop = 0; happy = typeof data.happy === 'number' ? data.happy : 50;
+        income = 0;
+        bankPlaced = !!data.bankPlaced;
+        gameOver = false;
+        gameWon = false;
+        freePlay = !!data.freePlay;
+        gamePaused = false;
+        factoryBuilt = !!data.factoryBuilt;
+        shopBuilt = !!data.shopBuilt;
+        firstDisasterAlertShown = !!data.firstDisasterAlertShown;
+        loan = data.loan ? { total: data.loan.total, remaining: data.loan.remaining, perMin: data.loan.perMin, borrowed: data.loan.borrowed } : null;
+        if (data.counts) Object.assign(counts, data.counts);
+        time = data.time || 0;
+        disasterTimer = data.disasterTimer || 0;
+        achieved.clear();
+        if (Array.isArray(data.achieved)) for (const a of data.achieved) achieved.add(a);
+        unlockedTools.clear();
+        if (Array.isArray(data.unlockedTools) && data.unlockedTools.length > 0) {
+            for (const u of data.unlockedTools) unlockedTools.add(u);
+        } else {
+            unlockedTools.add('bank');
+        }
+        naturalDisastersEnabled = data.naturalDisastersEnabled !== undefined
+            ? !!data.naturalDisastersEnabled
+            : !creativeMode;
+        incomeHistory = Array.isArray(data.incomeHistory) ? data.incomeHistory.slice() : [];
+        incomeBlockTimer = data.incomeBlockTimer || 0;
+        incomeBlockEarnings = data.incomeBlockEarnings || 0;
+
+        // ============================================================
+        // 6. Reset ephemeral state and camera.
+        // ============================================================
+        hc = -1; hr = -1;
+        mDown = false;
+        cam.panning = false;
+        lastPlacedTile = { c: -1, r: -1 };
+        camTween = null;
+        farmNetworkDirty = true;
+        celebrating = false; celebrateTimer = 0;
+        schoolAssignTimer = 0; vanDispatchTimer = 0;
+        autosaveTimer = 0;
+        keys = {};
+
+        tool = TOOLS.NONE;
+        document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+
+        // ============================================================
+        // 7. Kick off the game.
+        // ============================================================
+        resizeCanvas();
+        cam.z = clamp(Math.max(canvas.width / CW, canvas.height / CH), cam.minZ, cam.maxZ);
+        clampCamera();
+
+        updateToolLockState();
+        updateUI();
+        syncPauseUI();
+        gameStarted = true;
+        lastT = performance.now();
+        lastFrameTime = 0;
+        acc = 0;
+        requestAnimationFrame(loop);
+    }
+
+    function saveGameToStorage(slot) {
+        try {
+            const data = serializeGame();
+            const json = JSON.stringify(data);
+            localStorage.setItem(slot === 'autosave' ? SAVE_KEY_AUTOSAVE : SAVE_KEY_MANUAL, json);
+            return true;
+        } catch (err) {
+            console.error('Save failed:', err);
+            return false;
+        }
+    }
+
+    function hasSave(slot) {
+        try {
+            return !!localStorage.getItem(slot === 'autosave' ? SAVE_KEY_AUTOSAVE : SAVE_KEY_MANUAL);
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function readSaveMeta(slot) {
+        try {
+            const json = localStorage.getItem(slot === 'autosave' ? SAVE_KEY_AUTOSAVE : SAVE_KEY_MANUAL);
+            if (!json) return null;
+            const data = JSON.parse(json);
+            return {
+                savedAt: data.savedAt || 0,
+                W: data.W,
+                H: data.H,
+                money: data.money,
+                pop: data.pop,
+                creativeMode: !!data.creativeMode
+            };
+        } catch (_) {
+            return null;
+        }
+    }
+
+    window.__loadFromSave = function (slot) {
+        try {
+            const json = localStorage.getItem(slot === 'autosave' ? SAVE_KEY_AUTOSAVE : SAVE_KEY_MANUAL);
+            if (!json) return false;
+            const data = JSON.parse(json);
+            deserializeGame(data);
+            return true;
+        } catch (err) {
+            console.error('Load failed:', err);
+            return false;
+        }
+    };
+    window.__hasSave = hasSave;
+    window.__readSaveMeta = readSaveMeta;
+
+    // --- Save button ---
+    const saveBtn = document.getElementById('save-btn');
+    const saveModal = document.getElementById('save-modal');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            if (!gameStarted) {
+                toast('💾 Nothing to save yet — start a game first!');
+                return;
+            }
+            if (isGameEnded()) {
+                toast('💾 Cannot save a finished game.');
+                return;
+            }
+            const ok = saveGameToStorage('manual');
+            if (ok) {
+                sfx('save');
+                saveBtn.classList.add('saving');
+                setTimeout(() => saveBtn.classList.remove('saving'), 650);
+                if (saveModal) saveModal.classList.add('open');
+            } else {
+                toast('⚠️ Save failed (storage full or blocked).');
+            }
+        });
+    }
+    const saveModalOkBtn = document.getElementById('save-modal-ok');
+    if (saveModalOkBtn) {
+        saveModalOkBtn.addEventListener('click', () => {
+            if (saveModal) saveModal.classList.remove('open');
+        });
+    }
+    if (saveModal) {
+        saveModal.addEventListener('click', (e) => {
+            if (e.target === saveModal) saveModal.classList.remove('open');
+        });
+    }
+
     function updateSettingsUI() {
         const toggle = document.getElementById('natural-disasters-toggle');
         const note = document.getElementById('settings-creative-note');
         const row = document.getElementById('settings-natural-row');
         const soundToggle = document.getElementById('sound-toggle');
+        const autoToggle = document.getElementById('autosave-toggle');
         if (soundToggle) soundToggle.checked = !!soundEnabled;
+        if (autoToggle) autoToggle.checked = !!autosaveEnabled;
         if (toggle) {
             toggle.checked = !!naturalDisastersEnabled;
             toggle.disabled = !creativeMode;
@@ -7513,6 +8013,15 @@
                 tone(660, 0.08, 'sine', 0.10);
                 setTimeout(() => tone(880, 0.12, 'triangle', 0.09), 80);
             }
+        });
+    }
+    const autoToggle = document.getElementById('autosave-toggle');
+    if (autoToggle) {
+        autoToggle.addEventListener('change', () => {
+            autosaveEnabled = !!autoToggle.checked;
+            toast(autosaveEnabled
+                ? '💾 Autosave ENABLED — saving every 5 minutes (Normal mode only).'
+                : '💾 Autosave DISABLED.');
         });
     }
 
@@ -7588,6 +8097,7 @@
         celebrating = false; celebrateTimer = 0;
         schoolAssignTimer = 0;
         vanDispatchTimer = 0;
+        autosaveTimer = 0;
         happinessBreakdown = { park: 0, cinema: 0, arcade: 0, school: 0, shop: 0, pollution_heavy: 0, pollution_light: 0, abandoned: 0 };
         incomeBlockTimer = 0;
         incomeBlockEarnings = 0;
@@ -7663,6 +8173,17 @@
         const dt = Math.min((now - lastT) / 1000, 0.1);
         lastT = now;
         time += dt;
+
+        // ---- Autosave (Normal mode only, every 5 min) ----
+        if (!creativeMode && autosaveEnabled && bankPlaced && !isGameEnded()) {
+            autosaveTimer += dt;
+            if (autosaveTimer >= AUTOSAVE_INTERVAL) {
+                autosaveTimer = 0;
+                if (saveGameToStorage('autosave')) {
+                    toast('💾 Autosaved (load from Main Menu → 🔄 Load Latest Autosave)');
+                }
+            }
+        }
 
         if (camTween) {
             camTween.t += dt;
@@ -7791,6 +8312,7 @@
         time = 0; disasterTimer = 0;
         celebrating = false; celebrateTimer = 0;
         schoolAssignTimer = 0; vanDispatchTimer = 0;
+        autosaveTimer = 0;
         happinessBreakdown = { park: 0, cinema: 0, arcade: 0, school: 0, shop: 0, pollution_heavy: 0, pollution_light: 0, abandoned: 0 };
         incomeBlockTimer = 0;
         incomeBlockEarnings = 0;
@@ -7964,6 +8486,8 @@
     }
 
     sizeModal.querySelectorAll('.size-btn').forEach(function (btn) {
+        // Skip the load buttons — they have their own handlers.
+        if (btn.id === 'load-manual-btn' || btn.id === 'load-autosave-btn') return;
         btn.addEventListener('click', function () {
             playMenuClick();
             var sizeVal = btn.dataset.size;
@@ -8016,6 +8540,92 @@
             }
         });
     }
+
+    // ============================================================
+    // LOAD SAVED GAME buttons (Manual / Autosave)
+    // ============================================================
+    function formatSaveAge(ts) {
+        if (!ts) return 'unknown';
+        var age = Date.now() - ts;
+        if (age < 0) age = 0;
+        var sec = Math.floor(age / 1000);
+        if (sec < 60) return 'just now';
+        var min = Math.floor(sec / 60);
+        if (min < 60) return min + ' min ago';
+        var hr = Math.floor(min / 60);
+        if (hr < 24) return hr + ' hr ago';
+        var days = Math.floor(hr / 24);
+        return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+    }
+
+    function refreshLoadSection() {
+        var section = document.getElementById('load-section');
+        var manualBtn = document.getElementById('load-manual-btn');
+        var autoBtn = document.getElementById('load-autosave-btn');
+        var manualInfo = document.getElementById('load-manual-info');
+        var autoInfo = document.getElementById('load-autosave-info');
+        if (!section || !manualBtn || !autoBtn) return;
+
+        var hasManual = window.__hasSave && window.__hasSave('manual');
+        var hasAuto = window.__hasSave && window.__hasSave('autosave');
+
+        if (hasManual || hasAuto) {
+            section.classList.add('visible');
+        } else {
+            section.classList.remove('visible');
+        }
+
+        manualBtn.style.display = hasManual ? '' : 'none';
+        autoBtn.style.display = hasAuto ? '' : 'none';
+
+        if (hasManual && manualInfo) {
+            var meta = window.__readSaveMeta ? window.__readSaveMeta('manual') : null;
+            if (meta) {
+                var size = meta.W + '×' + meta.H;
+                manualInfo.textContent = size + ' · $' + Math.floor(meta.money) + ' · ' + formatSaveAge(meta.savedAt);
+            } else {
+                manualInfo.textContent = 'Available';
+            }
+        }
+        if (hasAuto && autoInfo) {
+            var meta2 = window.__readSaveMeta ? window.__readSaveMeta('autosave') : null;
+            if (meta2) {
+                var size2 = meta2.W + '×' + meta2.H;
+                autoInfo.textContent = size2 + ' · $' + Math.floor(meta2.money) + ' · ' + formatSaveAge(meta2.savedAt);
+            } else {
+                autoInfo.textContent = 'Available';
+            }
+        }
+    }
+
+    function loadSave(slot) {
+        if (!window.__loadFromSave) return;
+        playMenuClick();
+        var ok = window.__loadFromSave(slot);
+        if (!ok) {
+            alert('Could not load the save — it may be corrupted or from an incompatible version.');
+            return;
+        }
+        sizeModal.classList.remove('open');
+        // Do NOT show intro — start playing immediately.
+        if (typeof window.__pauseGame === 'function') {
+            window.__pauseGame(false);
+        }
+        if (typeof window.__toast === 'function') {
+            window.__toast('📂 Save loaded! Welcome back.');
+        }
+    }
+
+    var loadManualBtn = document.getElementById('load-manual-btn');
+    if (loadManualBtn) {
+        loadManualBtn.addEventListener('click', function () { loadSave('manual'); });
+    }
+    var loadAutoBtn = document.getElementById('load-autosave-btn');
+    if (loadAutoBtn) {
+        loadAutoBtn.addEventListener('click', function () { loadSave('autosave'); });
+    }
+
+    refreshLoadSection();
 })();
 </script>
 
